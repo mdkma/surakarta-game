@@ -166,7 +166,17 @@
             if (dragSrc === ev.target.id){
                 alert('YOU ARE BACK!\nYou move this piece back to its original position. Please choose another move.');
             } else if (ev.target.id[0] === 'p'){
-                alert('WOOP! YOU CAN\'T CAPTURE IT!\nOther piece there and can\'t capture that piece. Please choose another move.');
+                if (availableCaptures.indexOf(ev.path[1].id) != -1){
+                    // real capture
+                    alert('CAPTURE!');
+                    document.getElementById(ev.path[1].id).innerHTML = "";
+                    // move to that location
+                    var data = ev.dataTransfer.getData("text");
+                    ev.path[1].appendChild(document.getElementById(data));
+                } else{
+                    // not capture
+                    alert('WOOP! YOU CAN\'T CAPTURE IT!\nOther piece there and can\'t capture that piece. Please choose another move.');
+                }
             } else{
                 // move to that location
                 var data = ev.dataTransfer.getData("text");
