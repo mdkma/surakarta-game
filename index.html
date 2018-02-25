@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <!-- <script src="index.js"></script> -->
+    <script>
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+        
+        function drag(ev) {
+            ev.dataTransfer.setData("text", ev.target.id);
+        }
+        
+        function drop(ev) {
+            console.log("drop!");
+            console.log(ev);
+            ev.preventDefault();
+            var data = ev.dataTransfer.getData("text");
+            console.log(data);
+            ev.target.appendChild(document.getElementById(data));
+        }
+    </script>
+</head>
+<body>
+<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+<table style="width:100%">
+    <tr>
+        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+    </tr>
+</table>
+<img id="drag1" src="chicken.gif" draggable="true" ondragstart="drag(event)" width="336" height="69">
+<div id="p1" class="piece piece1" draggable="true" ondragstart="drag(event)"></div>
+<div id="board">
+    <svg height="800" width="800">
+        <line x1="0" y1="0" x2="500" y2="500" style="stroke:rgb(255,0,0);stroke-width:4" />
+    </svg>
+</div>
+</body>
+</html>

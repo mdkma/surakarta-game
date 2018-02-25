@@ -1,0 +1,49 @@
+tr {
+    width: 100px;
+    height: 100px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+td {
+    padding: 10px 0px;
+    border: 1px solid black;
+}
+
+#board {
+    position: absolute;
+}
+
+.piece {
+    width: 50px;
+    height: 50px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+}
+
+.piece1{
+    background: red;
+}
+
+.piece2{
+    background: blue;
+}
+
+#div1 {
+    width: 350px;
+    height: 70px;
+    padding: 10px;
+    border: 1px solid #aaaaaa;
+}
+
+/* td:after{
+    content: "";
+    display: block;
+    width: 100%;
+    height: 5px;
+    background-color: black;
+    position: relative;
+} */
