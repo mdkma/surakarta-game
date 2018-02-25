@@ -36,12 +36,11 @@
         }
         
         function drag(ev) {
-            console.log('move from: ', ev.path[1].id);
-            dragSrc = ev.path[1].id;
+            // console.log('move from: ', ev.path[1].id);
+            dragSrc = ev.path[0].id;
             var id = ev.path[1].id;
             var x = parseInt(id[3]);
             var y = parseInt(id[1]);
-            console.log(x, y);
             // detect available locations
             for (i = x-1; i < x+2; i++){
                 for (j = y-1; j < y+2; j++){
@@ -49,7 +48,6 @@
                     if (ele != null){
                         if (ele.childNodes.length <= 0){
                             document.getElementById('b'+j+'-'+i).style.border = '1px solid black';
-                            console.log('b'+j+'-'+i);
                         }
                     }
                 }
@@ -58,16 +56,13 @@
         }
         
         function drop(ev) {
-            // console.log(ev);
-            console.log('move to: ', ev.target.id);
+            // console.log('move to: ', ev.target.id);
             ev.preventDefault();
             // check whether don't move
-            console.log(dragSrc);
-            console.log(ev.target.id);
             if (dragSrc === ev.target.id){
-                console.log('dont move');
+                alert('You move this piece back to its original position. Please choose another move.');
             } else if (ev.target.id[0] === 'p'){
-                console.log('other piece there');
+                alert('Other piece there and can\'t capture that piece. Please choose another move.');
             } else{
                 // move to that location
                 var data = ev.dataTransfer.getData("text");
