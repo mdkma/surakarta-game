@@ -129,9 +129,16 @@ table {
 #c4-2 {
     top: 296px;
     left: 296px;
-
     border-top-right-radius: 50%;
     border-bottom-left-radius: 50%;
     border-bottom-right-radius:50%;
     border: 8px solid green;
+}
+
+.l1 {
+    margin-top: 196px;
+}
+
+.c1 {
+    margin-left: 205px;
 }

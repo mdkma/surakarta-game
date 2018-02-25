@@ -4,14 +4,31 @@
     <link rel="stylesheet" type="text/css" href="index.css">
     <!-- <script src="index.js"></script> -->
     <script>
-        function loadBoard(){
-            var c=document.getElementById("c3-1");
-            var ctx=c.getContext("2d");
-            ctx.beginPath();
-            ctx.arc(100,100,50,0,1.5*Math.PI);
-            ctx.lineWidth=5;
-            ctx.strokeStyle="blue";
-            ctx.stroke();
+        function initPieces(){
+            html = '';
+            for (i = 0; i < 2; i++) { 
+                html += '<tr>';
+                for (j = 0; j < 6; j++){
+                    html += "<td id='b"+i+"-"+j+"' ondrop='drop(event)' ondragover='allowDrop(event)'><div id='p"+i+"-"+j+"' class='piece piece1' draggable='true' ondragstart='drag(event)'></div></td>"
+                }
+                html += '</tr>';
+            }
+            for (i = 2; i < 4; i++) { 
+                html += '<tr>';
+                for (j = 0; j < 6; j++){
+                    html += "<td id='b"+i+"-"+j+"' ondrop='drop(event)' ondragover='allowDrop(event)'></td>"
+                }
+                html += '</tr>';
+            }
+            for (i = 4; i < 6; i++) { 
+                html += '<tr>';
+                for (j = 0; j < 6; j++){
+                    html += "<td id='b"+i+"-"+j+"' ondrop='drop(event)' ondragover='allowDrop(event)'><div id='p"+i+"-"+j+"' class='piece piece2' draggable='true' ondragstart='drag(event)'></div></td>"
+                }
+                html += '</tr>';
+            }
+            alert(html);
+            document.getElementById('table').innerHTML = html;
         }
 
         function allowDrop(ev) {
@@ -24,15 +41,15 @@
         
         function drop(ev) {
             // console.log(ev);
-            // console.log(ev.target.id);
+            console.log(ev.target.id);
             ev.preventDefault();
             var data = ev.dataTransfer.getData("text");
             ev.target.appendChild(document.getElementById(data));
         }
     </script>
 </head>
-<body onload="loadBoard();">
-<table>
+<body onload="initPieces();">
+<table id='table'>
     <tr>
         <td id="b1-1" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
         <td id="b1-2" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
@@ -41,51 +58,13 @@
         <td id="b1-5" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
         <td id="b1-6" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
     </tr>
-    <tr>
-        <td id="b2-1" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b2-2" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b2-3" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b2-4" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b2-5" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b2-6" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-    </tr>
-    <tr>
-        <td id="b3-1" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b3-2" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b3-3" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b3-4" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b3-5" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b3-6" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-    </tr>
-    <tr>
-        <td id="b4-1" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b4-2" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b4-3" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b4-4" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b4-5" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b4-6" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-    </tr>
-    <tr>
-        <td id="b5-1" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b5-2" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b5-3" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b5-4" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b5-5" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b5-6" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-    </tr>
-    <tr>
-        <td id="b6-1" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b6-2" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b6-3" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b6-4" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b6-5" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b6-6" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-    </tr>
 </table>
-<div id="p1-1" class="piece piece1" draggable="true" ondragstart="drag(event)"></div>
-<div id="p1-2" class="piece piece1" draggable="true" ondragstart="drag(event)"></div>
-<div id="p2-1" class="piece piece2" draggable="true" ondragstart="drag(event)"></div>
-<div id="p2-2" class="piece piece2" draggable="true" ondragstart="drag(event)"></div>
+<div id="p">
+    <!-- <div id="p1-1" class="piece piece1" draggable="true" ondragstart="drag(event)"></div>
+    <div id="p1-2" class="piece piece1" draggable="true" ondragstart="drag(event)"></div>
+    <div id="p2-1" class="piece piece2" draggable="true" ondragstart="drag(event)"></div>
+    <div id="p2-2" class="piece piece2" draggable="true" ondragstart="drag(event)"></div> -->
+</div>
 <div id="board">
     <svg height="500" width="500">
         <line x1="0" y1="0" x2="500" y2="0" style="stroke:rgb(255, 191, 0);stroke-width:12" />
@@ -110,6 +89,5 @@
     <div id="c4-1" class="circle circle-s"></div>
     <div id="c4-2" class="circle circle-l"></div>
 </div>
-<!-- <canvas id="c3-1" class="circle" width="300" height="150"></canvas> -->
 </body>
 </html>
