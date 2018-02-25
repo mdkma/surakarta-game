@@ -4,6 +4,16 @@
     <link rel="stylesheet" type="text/css" href="index.css">
     <!-- <script src="index.js"></script> -->
     <script>
+        function loadBoard(){
+            var c=document.getElementById("c3-1");
+            var ctx=c.getContext("2d");
+            ctx.beginPath();
+            ctx.arc(100,100,50,0,1.5*Math.PI);
+            ctx.lineWidth=5;
+            ctx.strokeStyle="blue";
+            ctx.stroke();
+        }
+
         function allowDrop(ev) {
             ev.preventDefault();
         }
@@ -14,47 +24,52 @@
         
         function drop(ev) {
             // console.log(ev);
+            // console.log(ev.target.id);
             ev.preventDefault();
             var data = ev.dataTransfer.getData("text");
             ev.target.appendChild(document.getElementById(data));
         }
     </script>
 </head>
-<body>
+<body onload="loadBoard();">
 <table>
     <tr>
-        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-    </tr>
-    <tr>
-        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-    </tr>
-    <tr>
-        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td id="b1-1" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td id="b1-2" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td id="b1-3" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td id="b1-4" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td id="b1-5" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td id="b1-6" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
     </tr>
 </table>
-<div id="p1" class="piece piece1" draggable="true" ondragstart="drag(event)"></div>
+<div id="p1-1" class="piece piece1" draggable="true" ondragstart="drag(event)"></div>
+<div id="p1-2" class="piece piece1" draggable="true" ondragstart="drag(event)"></div>
+<div id="p2-1" class="piece piece2" draggable="true" ondragstart="drag(event)"></div>
+<div id="p2-2" class="piece piece2" draggable="true" ondragstart="drag(event)"></div>
 <div id="board">
     <svg height="500" width="500">
-        <line x1="0" y1="0" x2="500" y2="0" style="stroke:rgb(255, 191, 0);stroke-width:4" />
-        <line x1="0" y1="0" x2="0" y2="500" style="stroke:rgb(255, 191, 0);stroke-width:4" />
-        <line x1="500" y1="0" x2="500" y2="500" style="stroke:rgb(255, 191, 0);stroke-width:4" />
-        <line x1="0" y1="500" x2="500" y2="500" style="stroke:rgb(255, 191, 0);stroke-width:4" />
+        <line x1="0" y1="0" x2="500" y2="0" style="stroke:rgb(255, 191, 0);stroke-width:12" />
+        <line x1="0" y1="0" x2="0" y2="500" style="stroke:rgb(255, 191, 0);stroke-width:12" />
+        <line x1="500" y1="0" x2="500" y2="500" style="stroke:rgb(255, 191, 0);stroke-width:12" />
+        <line x1="0" y1="500" x2="500" y2="500" style="stroke:rgb(255, 191, 0);stroke-width:12" />
+        <line x1="100" y1="0" x2="100" y2="500" style="stroke:rgb(0, 170, 255);stroke-width:8" />
+        <line x1="400" y1="0" x2="400" y2="500" style="stroke:rgb(0, 170, 255);stroke-width:8" />
+        <line x1="200" y1="0" x2="200" y2="500" style="stroke:rgb(0, 255, 102);stroke-width:8" />
+        <line x1="300" y1="0" x2="300" y2="500" style="stroke:rgb(0, 255, 102);stroke-width:8" />
+        <line x1="0" y1="100" x2="500" y2="100" style="stroke:rgb(0, 170, 255);stroke-width:8" />
+        <line x1="0" y1="400" x2="500" y2="400" style="stroke:rgb(0, 170, 255);stroke-width:8" />
+        <line x1="0" y1="200" x2="500" y2="200" style="stroke:rgb(0, 255, 102);stroke-width:8" />
+        <line x1="0" y1="300" x2="500" y2="300" style="stroke:rgb(0, 255, 102);stroke-width:8" />
     </svg>
+    <div id="c1-1" class="circle circle-s"></div>
+    <div id="c1-2" class="circle circle-l"></div>
+    <div id="c2-1" class="circle circle-s"></div>
+    <div id="c2-2" class="circle circle-l"></div>
+    <div id="c3-1" class="circle circle-s"></div>
+    <div id="c3-2" class="circle circle-l"></div>
+    <div id="c4-1" class="circle circle-s"></div>
+    <div id="c4-2" class="circle circle-l"></div>
 </div>
+<!-- <canvas id="c3-1" class="circle" width="300" height="150"></canvas> -->
 </body>
 </html>

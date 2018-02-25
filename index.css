@@ -9,13 +9,14 @@ table {
     border-collapse: collapse;
     /* position: fixed; */
     /* margin-left: -250px; */
+    margin-left: 200px;
     z-index: -1;
 }
 
 #board {
     position: absolute;
     z-index: -1;
-    top: 100px;
+    top: 200px;
     left: 250px;
     /* left: 50%;
     margin-left: -250px; */
@@ -23,8 +24,8 @@ table {
 
 .piece {
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
     border-radius: 50%;
@@ -37,4 +38,98 @@ table {
 
 .piece2{
     background: red;
+}
+
+.circle {
+    position: absolute;
+    z-index: -1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.circle-s {
+    width: 200px;
+    height: 200px;
+}
+
+.circle-l {
+    width: 400px;
+    height: 400px;
+}
+
+#c1-1 {
+    top: -96px;
+    left: -96px;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-left-radius:50%;
+    border: 8px solid blue;
+}
+
+#c1-2 {
+    top: -196px;
+    left: -196px;
+
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-left-radius:50%;
+    border: 8px solid green;
+}
+
+#c2-1 {
+    top: -96px;
+    left: 396px;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius:50%;
+    border: 8px solid blue;
+}
+
+#c2-2 {
+    top: -196px;
+    left: 296px;
+
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius:50%;
+    border: 8px solid green;
+}
+
+#c3-1 {
+    top: 396px;
+    left: -96px;
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius:50%;
+    border: 8px solid blue;
+}
+
+#c3-2 {
+    top: 296px;
+    left: -196px;
+
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius:50%;
+    border: 8px solid green;
+}
+
+#c4-1 {
+    top: 396px;
+    left: 396px;
+    border-top-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius:50%;
+    border: 8px solid blue;
+}
+
+#c4-2 {
+    top: 296px;
+    left: 296px;
+
+    border-top-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius:50%;
+    border: 8px solid green;
 }
