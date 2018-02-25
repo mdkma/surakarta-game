@@ -13,20 +13,32 @@
         }
         
         function drop(ev) {
-            console.log("drop!");
-            console.log(ev);
+            // console.log(ev);
             ev.preventDefault();
             var data = ev.dataTransfer.getData("text");
-            console.log(data);
             ev.target.appendChild(document.getElementById(data));
         }
     </script>
 </head>
 <body>
-<div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-<table style="width:100%">
+<table>
     <tr>
         <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+    </tr>
+    <tr>
+        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+        <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
+    </tr>
+    <tr>
         <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
         <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
         <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
@@ -35,11 +47,13 @@
         <td ondrop="drop(event)" ondragover="allowDrop(event)"></td>
     </tr>
 </table>
-<img id="drag1" src="chicken.gif" draggable="true" ondragstart="drag(event)" width="336" height="69">
 <div id="p1" class="piece piece1" draggable="true" ondragstart="drag(event)"></div>
 <div id="board">
-    <svg height="800" width="800">
-        <line x1="0" y1="0" x2="500" y2="500" style="stroke:rgb(255,0,0);stroke-width:4" />
+    <svg height="500" width="500">
+        <line x1="0" y1="0" x2="500" y2="0" style="stroke:rgb(255, 191, 0);stroke-width:4" />
+        <line x1="0" y1="0" x2="0" y2="500" style="stroke:rgb(255, 191, 0);stroke-width:4" />
+        <line x1="500" y1="0" x2="500" y2="500" style="stroke:rgb(255, 191, 0);stroke-width:4" />
+        <line x1="0" y1="500" x2="500" y2="500" style="stroke:rgb(255, 191, 0);stroke-width:4" />
     </svg>
 </div>
 </body>
