@@ -27,7 +27,6 @@
                 }
                 html += '</tr>';
             }
-            alert(html);
             document.getElementById('table').innerHTML = html;
         }
 
@@ -49,22 +48,7 @@
     </script>
 </head>
 <body onload="initPieces();">
-<table id='table'>
-    <tr>
-        <td id="b1-1" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b1-2" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b1-3" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b1-4" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b1-5" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-        <td id="b1-6" ondrop="drop(event)" ondragover="allowDrop(event)"></td>
-    </tr>
-</table>
-<div id="p">
-    <!-- <div id="p1-1" class="piece piece1" draggable="true" ondragstart="drag(event)"></div>
-    <div id="p1-2" class="piece piece1" draggable="true" ondragstart="drag(event)"></div>
-    <div id="p2-1" class="piece piece2" draggable="true" ondragstart="drag(event)"></div>
-    <div id="p2-2" class="piece piece2" draggable="true" ondragstart="drag(event)"></div> -->
-</div>
+<table id='table'></table>
 <div id="board">
     <svg height="500" width="500">
         <line x1="0" y1="0" x2="500" y2="0" style="stroke:rgb(255, 191, 0);stroke-width:12" />
