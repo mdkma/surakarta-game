@@ -9,6 +9,19 @@
         var dragSrc = '';
         var availableNormalMoves = [];
         var availableCaptures = [];
+
+        function nextRound() {
+            console.log('next round');
+            turn = 1 - turn;
+            if (turn === 0){//AI's turn
+                document.getElementById('turn').innerHTML = "It's Mr. AI's Turn";
+                document.getElementById('turn').style.color = 'black';
+            } else {
+                document.getElementById('turn').innerHTML = "It's Your Turn";
+                document.getElementById('turn').style.color = 'red';
+            }
+        } 
+
         function initPieces(){
             html = '';
             for (i = 0; i < 2; i++) { 
@@ -168,6 +181,7 @@
         function drop(ev) {
             // console.log('move to: ', ev.target.id);
             ev.preventDefault();
+            finishFlag = false;
             // check whether don't move
             if (dragSrc === ev.target.id){
                 alert('YOU ARE BACK!\nYou move this piece back to its original position. Please choose another move.');
@@ -179,6 +193,8 @@
                     // move to that location
                     var data = ev.dataTransfer.getData("text");
                     ev.path[1].appendChild(document.getElementById(data));
+                    // update grades // TODO
+                    finishFlag = true;
                 } else{
                     // not capture
                     alert('WOOP! YOU CAN\'T CAPTURE IT!\nOther piece there and can\'t capture that piece. Please choose another move.');
@@ -187,6 +203,7 @@
                 // move to that location
                 var data = ev.dataTransfer.getData("text");
                 ev.target.appendChild(document.getElementById(data));
+                finishFlag = true;
             }
             // remove reminder border
             var t = document.getElementById("table"),
@@ -198,6 +215,9 @@
                 for( j = 0, jlen = tds.length; j < jlen; j++) {
                     tds[j].style.border = '1px solid transparent';
                 }
+            }
+            if (finishFlag){
+                nextRound();
             }
         }
     </script>
