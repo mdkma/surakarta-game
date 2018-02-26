@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="index.css">
     <!-- <script src="index.js"></script> -->
     <script>
-        var turn = 0; // 0 for black, 1 for red
+        var turn = 1; // 0 for black, 1 for red
         var dragSrc = '';
         var availableNormalMoves = [];
         var availableCaptures = [];
@@ -16,9 +16,29 @@
             if (turn === 0){//AI's turn
                 document.getElementById('turn').innerHTML = "It's Mr. AI's Turn";
                 document.getElementById('turn').style.color = 'black';
+                for (i = 0; i < 2; i++) { 
+                    for (j = 0; j < 6; j++){
+                        document.getElementById('p'+i+'-'+j).style.opacity = 1;
+                    }
+                }
+                for (i = 4; i < 6; i++) { 
+                    for (j = 0; j < 6; j++){
+                        document.getElementById('p'+i+'-'+j).style.opacity = 0.5;
+                    }
+                }
             } else {
                 document.getElementById('turn').innerHTML = "It's Your Turn";
                 document.getElementById('turn').style.color = 'red';
+                for (i = 0; i < 2; i++) { 
+                    for (j = 0; j < 6; j++){
+                        document.getElementById('p'+i+'-'+j).style.opacity = 0.5;
+                    }
+                }
+                for (i = 4; i < 6; i++) { 
+                    for (j = 0; j < 6; j++){
+                        document.getElementById('p'+i+'-'+j).style.opacity = 1;
+                    }
+                }
             }
         } 
 
@@ -46,6 +66,7 @@
                 html += '</tr>';
             }
             document.getElementById('table').innerHTML = html;
+            nextRound();
         }
 
         function allowDrop(ev) {
@@ -257,8 +278,11 @@
     <button type="button" class="btn btn-danger">STOP</button>
     <button type="button" class="btn btn-primary">RESTART</button>
 </div>
-</body>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+<!-- <script>
+        nextRound();
+    </script> -->
 </html>
