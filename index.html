@@ -110,7 +110,7 @@
                 html += '</tr>';
             }
             document.getElementById('table').innerHTML = html;
-            // nextRound();
+            nextRound();
         }
 
         function allowDrop(ev) {
@@ -266,7 +266,6 @@
                     // move to that location
                     var data = ev.dataTransfer.getData("text");
                     ev.path[1].appendChild(document.getElementById(data));
-                    // update grades // TODO
                     finishFlag = true;
                 } else{
                     // not capture
@@ -294,45 +293,50 @@
             }
         }
 
-        // dragSrc = ev.path[0].id;
-        //     var id = ev.path[1].id;
-        //     var x = parseInt(id[3]);
-        //     var y = parseInt(id[1]);
-
         function callAIPerform(){
             console.log('AI');
             // i = 2;
             // j = 1;
-            stopFlag = false;
-            capturesPiece = "";
-            movePiece = "";
-            // go through every board point
-            for (i = 0; i < 6; i++){
-                for (j = 0; j < 6; j++){
+            var stopFlag = false;
+            var capturesPiece = "";
+            var movePiece = "";
+            // go through every board point find possible piece
+            var i = 0;
+            var j = 0;
+            while (!stopFlag && i < 6){
+                j = 0;
+                while (!stopFlag && j < 6){
                     var ele = document.getElementById('b'+j+'-'+i);
                     if (ele != null){
-                        console.log('1');
                         if (ele.childNodes.length > 0){
-                            console.log('2');
                             if (ele.childNodes[0].id[1] < 3){ // this is a black piece
-                                console.log('3');
                                 detectAvailable(i, j, 'none', ele.childNodes[0].id);
                                 if (availableCaptures.length > 0){
-                                    console.log('----------possible capture!');
+                                    // console.log('----------possible capture!');
                                     capturesPiece = 'b'+j+'-'+i;
-                                    // break;
+                                    stopFlag = true;
                                 } else if (availableNormalMoves.length > 0){
-                                    console.log('----------possible move!');
-                                    movePiece = 'b'+j+'-'+i;
-                                    // break;
+                                    // console.log('----------possible move!');
+                                    movePiece = availableNormalMoves[0];
+                                    stopFlag = true;
                                 }
                             }
                         }
                     }
+                    j += 1;
                 }
+                i += 1;
             }
+            // drop that piece
             console.log(capturesPiece);
             console.log(movePiece);
+            if (capturesPiece != ""){
+                // drop to that capture point
+            } else if (movePiece != ""){
+                // drop to that normal move
+            } else {
+                alert("AI can't find any possible move. AI is died!");
+            }
         }
     </script>
 </head>
