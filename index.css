@@ -14,6 +14,17 @@ table {
     z-index: -1;
 }
 
+#noticeBoard {
+    position: absolute;
+    top: 50px;
+    left: 1050px;
+}
+
+#turn {
+    font-size: 50px;
+    color: black;
+}
+
 #board {
     position: absolute;
     z-index: -1;

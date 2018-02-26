@@ -2,8 +2,10 @@
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <!-- <script src="index.js"></script> -->
     <script>
+        var turn = 0; // 0 for black, 1 for red
         var dragSrc = '';
         var availableNormalMoves = [];
         var availableCaptures = [];
@@ -36,13 +38,8 @@
         function allowDrop(ev) {
             ev.preventDefault();
         }
-        
-        function drag(ev) {
-            // console.log('move from: ', ev.path[1].id);
-            dragSrc = ev.path[0].id;
-            var id = ev.path[1].id;
-            var x = parseInt(id[3]);
-            var y = parseInt(id[1]);
+
+        function detectAvailable(x, y, id, dragSrc){
             availableNormalMoves = [];
             availableCaptures = [];
             // detect available locations by normal move
@@ -79,7 +76,16 @@
             }
             console.log('availableNormalMoves:', availableNormalMoves);
             console.log('availableCaptures:', availableCaptures);
+        }
+        
+        function drag(ev) {
+            // console.log('move from: ', ev.path[1].id);
+            dragSrc = ev.path[0].id;
+            var id = ev.path[1].id;
+            var x = parseInt(id[3]);
+            var y = parseInt(id[1]);
             ev.dataTransfer.setData("text", ev.target.id);
+            detectAvailable(x, y, id, dragSrc);
         }
 
         function jump(my_x, my_y){
@@ -222,5 +228,17 @@
     <div id="c4-1" class="circle circle-s"></div>
     <div id="c4-2" class="circle circle-l"></div>
 </div>
+<div id='noticeBoard'>
+    <h2 id='turn' class='display-2'>It's Mr. AI's Turn</h2>
+    <h5>You are red, Mr. AI is black.</h5>
+    </br>
+    <p>Mr. AI has captured your pieces: <div id='capture-ai'>0</div> </p>
+    <p>You have captured Mr. AI's pieces: <div id='capture-you'>0</div> </p>
+    <button type="button" class="btn btn-danger">STOP</button>
+    <button type="button" class="btn btn-primary">RESTART</button>
+</div>
 </body>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </html>
