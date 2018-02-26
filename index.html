@@ -13,7 +13,6 @@
         var availableCaptures = [];
 
         function nextRound() {
-            console.log('next round');
             // check win/lose in this round
             if ((capture_ai >= 12) || (capture_you) >= 12){
                 stop();
@@ -38,7 +37,7 @@
                         }
                     }
                 }
-                callAIPerform();
+                setTimeout(function(){ callAIPerform(); }, 3000);
             } else {
                 document.getElementById('turn').innerHTML = "It's Your Turn";
                 document.getElementById('turn').style.color = 'red';
@@ -169,7 +168,6 @@
             var x = parseInt(id[3]);
             var y = parseInt(id[1]);
             ev.dataTransfer.setData("text", ev.target.id);
-            console.log(dragSrc, id, x, y);
             detectAvailable(x, y, id, dragSrc);
         }
 
@@ -273,9 +271,13 @@
                 }
             } else{
                 // move to that location
-                var data = ev.dataTransfer.getData("text");
-                ev.target.appendChild(document.getElementById(data));
-                finishFlag = true;
+                if (ev.dataTransfer){
+                    var data = ev.dataTransfer.getData("text");
+                    ev.target.appendChild(document.getElementById(data));
+                    finishFlag = true;
+                } else {
+                    ev.target.appendChild(document.getElementById(dragSrc));
+                }
             }
             // remove reminder border
             var t = document.getElementById("table"),
@@ -294,9 +296,7 @@
         }
 
         function callAIPerform(){
-            console.log('AI');
-            // i = 2;
-            // j = 1;
+            setTimeout
             var stopFlag = false;
             var capturesPiece = "";
             var movePiece = "";
@@ -320,6 +320,7 @@
                                     movePiece = availableNormalMoves[0];
                                     stopFlag = true;
                                 }
+                                dragSrc = ele.childNodes[0].id;
                             }
                         }
                     }
@@ -328,12 +329,16 @@
                 i += 1;
             }
             // drop that piece
-            console.log(capturesPiece);
-            console.log(movePiece);
             if (capturesPiece != ""){
                 // drop to that capture point
+                // TODO: do capture automatically
             } else if (movePiece != ""){
                 // drop to that normal move
+                var event = new DragEvent('drag');
+                targetPiece = document.getElementById(movePiece);
+                Object.defineProperty(event, 'target', {value: targetPiece, enumerable: true});
+                drop(event);
+                nextRound();
             } else {
                 alert("AI can't find any possible move. AI is died!");
             }
