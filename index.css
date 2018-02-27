@@ -1,5 +1,5 @@
 #startPage {
-    position: absolute;
+    position: fixed;
     width: 100%;
     height: 100%;
     background: #5C6BC0;
@@ -10,6 +10,10 @@
 #welcome {
     color: white;
     margin-top: 200px;
+    margin-left: 100px;
+}
+
+#nameimg {
     margin-left: 100px;
 }
 
