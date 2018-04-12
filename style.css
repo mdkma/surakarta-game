@@ -1,0 +1,61 @@
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  margin: 0;
+}
+
+.title {
+  text-align: center;
+  font: italic 32px Georgia, serif;
+  color: rgb(191, 0, 255);
+  text-shadow: 2px 0 0 rgb(0, 255, 191), -2px 0 0 rgb(0, 255, 191), 0 2px 0 rgb(0, 255, 191), 0 -2px 0 rgb(0, 255, 191), 1px 1px rgb(0, 255, 191), -1px -1px 0 rgb(0, 255, 191), 1px -1px 0 rgb(0, 255, 191), -1px 1px 0 rgb(0, 255, 191);
+}
+
+.board {
+  width: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.board svg {
+  width: 100%;
+  height: auto;
+}
+
+.info {
+  width: 90%;
+  margin: auto;
+  height: auto;
+}
+
+.info .turn {
+  border: 1px solid orange;
+  padding: 5px;
+}
+
+.info .opera {
+  position: absolute;
+  left: 50%;
+  bottom: 15px;
+  width: 150px;
+  margin-left: -75px;
+}
+
+.info .opera button {
+  padding: 6px;
+  border-radius: 4px;
+  color: #ffffff;
+  margin: 5px 10px;
+}
+
+.info .opera .stop {
+  background-color: #d9534f;
+}
+
+.info .opera .restart {
+  background-color: #337ab7;
+}
