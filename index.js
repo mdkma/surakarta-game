@@ -1,14 +1,8 @@
 var database = firebase.database();
 
-// function saveTest() {
-//     window.alert("hhaha");
-//     firebase.database().ref('users/').set({
-//         t1: 'wo'
-//     });
-//     window.alert("555");
-// }
-
-// saveTest();
+/*
+ *  INIT: SET GLOBAL VARIABLES
+ */
 
 var session = -1;
 var side = 1; // 0 for black, 1 for red what color you want to use?
@@ -18,154 +12,11 @@ var capture_you = 0;
 var dragSrc = '';
 var availableNormalMoves = [];
 var availableCaptures = [];
+var oppoName = "derek"; //temp
 
-function nextRound() {
-    console.log('--------------------next round');
-    updateProgressCloud();
-    // check win/lose in this round
-    if ((capture_ai >= 12) || (capture_you) >= 12){
-        stop();
-    }
-    turn = 1 - turn;
-    if (turn === 0){// not my turn
-        document.getElementById('turn').innerHTML = "It's Mr. AI's Turn";
-        document.getElementById('turn').style.color = 'black';
-        flagHere = "false";
-        flagValue = 0.5;
-        for (i = 0; i < 2; i++) { 
-            for (j = 0; j < 6; j++){
-                if (document.getElementById('p'+i+'-'+j)){
-                    document.getElementById('p'+i+'-'+j).style.opacity = flagValue;
-                    document.getElementById('p'+i+'-'+j).setAttribute("draggable", flagHere);
-                }
-            }
-        }
-        for (i = 4; i < 6; i++) { 
-            for (j = 0; j < 6; j++){
-                if (document.getElementById('p'+i+'-'+j)){
-                    document.getElementById('p'+i+'-'+j).style.opacity = flagValue;
-                    document.getElementById('p'+i+'-'+j).setAttribute("draggable", "false");
-                }
-            }
-        }
-    } else { // my turn
-        console.log('my turn');
-        document.getElementById('turn').innerHTML = "It's Your Turn";
-        document.getElementById('turn').style.color = 'red';
-        if (side == 1){
-            flagHere = "true";
-            flagHere2 = "false";
-            flagValue = 1;
-            flagValue2=0.5;
-        } else {
-            flagHere = "false";
-            flagHere2 = "true";
-            flagValue = 0.5;
-            flagValue2 = 1;
-        }
-        for (i = 0; i < 2; i++) { 
-            for (j = 0; j < 6; j++){
-                if (document.getElementById('p'+i+'-'+j)){
-                    document.getElementById('p'+i+'-'+j).style.opacity = flagValue2;
-                    document.getElementById('p'+i+'-'+j).setAttribute("draggable", flagHere2);
-                }
-            }
-        }
-        for (i = 4; i < 6; i++) { 
-            for (j = 0; j < 6; j++){
-                if (document.getElementById('p'+i+'-'+j)){
-                    document.getElementById('p'+i+'-'+j).style.opacity = flagValue;
-                    document.getElementById('p'+i+'-'+j).setAttribute("draggable", flagHere);
-                }
-            }
-        }
-    }
-} 
-
-function stop(){
-    if (capture_ai > capture_you){
-        alert('GAME STOP!\nMr. AI Won!');
-    } else if (capture_ai < capture_you){
-        alert('GAME STOP!\nYou Won! Congratulations!');
-    } else {
-        alert('GAME STOP!\nYou and Mr. AI leave same amount of pieces on the board, nobody wins.');
-    }
-}
-
-function restart(){
-    location.reload();
-}
-
-function capture(){
-    if (turn === 0){ // now it's black turn, captured a red piece
-        capture_ai += 1;
-        document.getElementById('capture-ai').innerHTML = capture_ai;
-    } else {
-        capture_you += 1;
-        document.getElementById('capture-you').innerHTML = capture_you;
-    }
-}
-
-// FIREBASE OPERATIONS
-
-function updateProgressCloud(){
-    var locForPieces = {};
-    for (i = 0; i < 2; i++){
-        for (j = 0; j < 6; j++){
-            if (document.getElementById('p'+i+'-'+j) != null){
-                locForPieces['p'+i+'-'+j] = document.getElementById('p'+i+'-'+j).parentElement.id;
-            } else {
-                // this piece is already been captured
-                locForPieces['p'+i+'-'+j] = 'captured';
-            }
-        }
-    }
-    for (i = 4; i < 6; i++){
-        for (j = 0; j < 6; j++){
-            if (document.getElementById('p'+i+'-'+j) != null){
-                locForPieces['p'+i+'-'+j] = document.getElementById('p'+i+'-'+j).parentElement.id;
-            } else {
-                // this piece is already been captured
-                locForPieces['p'+i+'-'+j] = 'captured';
-            }
-        }
-    }
-    database.ref('battle/'+session+'/board').set(locForPieces);
-
-}
-
-function initPieces(){
-    document.getElementById('startPage').style.display='none';
-    html = '';
-    for (i = 0; i < 2; i++) { 
-        html += '<tr>';
-        for (j = 0; j < 6; j++){
-            html += "<td id='b"+i+"-"+j+"' ondrop='drop(event)' ondragover='allowDrop(event)'><div id='p"+i+"-"+j+"' class='piece piece1' draggable='true' ondragstart='drag(event)'></div></td>"
-        }
-        html += '</tr>';
-    }
-    for (i = 2; i < 4; i++) { 
-        html += '<tr>';
-        for (j = 0; j < 6; j++){
-            html += "<td id='b"+i+"-"+j+"' ondrop='drop(event)' ondragover='allowDrop(event)'></td>"
-        }
-        html += '</tr>';
-    }
-    for (i = 4; i < 6; i++) { 
-        html += '<tr>';
-        for (j = 0; j < 6; j++){
-            html += "<td id='b"+i+"-"+j+"' ondrop='drop(event)' ondragover='allowDrop(event)'><div id='p"+i+"-"+j+"' class='piece piece2' draggable='true' ondragstart='drag(event)'></div></td>"
-        }
-        html += '</tr>';
-    }
-    document.getElementById('table').innerHTML = html;
-    // updateProgressCloud();
-    nextRound();
-}
-
-function allowDrop(ev) {
-    ev.preventDefault();
-}
+/*
+ *  GAME LOGIC: PATH FINDINGS
+ */
 
 function detectAvailable(x, y, id, dragSrc){
     availableNormalMoves = [];
@@ -210,24 +61,6 @@ function detectAvailable(x, y, id, dragSrc){
     }
     console.log('availableNormalMoves:', availableNormalMoves);
     console.log('availableCaptures:', availableCaptures);
-}
-
-function drag(ev) {
-    // console.log('move from: ', ev.path[1].id);
-    dragSrc = ev.path[0].id;
-    var id = ev.path[1].id;
-    var x = parseInt(id[3]);
-    var y = parseInt(id[1]);
-    ev.dataTransfer.setData("text", ev.target.id);
-    detectAvailable(x, y, id, dragSrc);
-}
-
-function jump(my_x, my_y){
-    if (Math.abs(my_y - my_x) < 3){ // left top and right buttom 8 points
-        return [my_y, my_x, true];
-    } else { // right top and left buttom 8 points
-        return [(5-my_y), (5-my_x), true];
-    }
 }
 
 function initSearchPoints(my_x, my_y){
@@ -299,10 +132,37 @@ function search(my_x, my_y, prev_x, prev_y, start_x, start_y, circle) {
     return search(nextOneAxis[0], nextOneAxis[1], my_x, my_y, start_x, start_y, circle);
 }
 
+/*
+ *  GAME LOGIC: INPUTS OF USERS
+ */
+
+function drag(ev) {
+    // console.log('move from: ', ev.path[1].id);
+    dragSrc = ev.path[0].id;
+    var id = ev.path[1].id;
+    var x = parseInt(id[3]);
+    var y = parseInt(id[1]);
+    ev.dataTransfer.setData("text", ev.target.id);
+    detectAvailable(x, y, id, dragSrc);
+}
+
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function jump(my_x, my_y){
+    if (Math.abs(my_y - my_x) < 3){ // left top and right buttom 8 points
+        return [my_y, my_x, true];
+    } else { // right top and left buttom 8 points
+        return [(5-my_y), (5-my_x), true];
+    }
+}
+
 function drop(ev) {
     // console.log('move to: ', ev.target.id);
     ev.preventDefault();
     finishFlag = false;
+    manualFlag = false;
     // check whether don't move
     if (dragSrc === ev.target.id){
         alert('YOU ARE BACK!\nYou move this piece back to its original position. Please choose another move.');
@@ -316,6 +176,7 @@ function drop(ev) {
             var data = ev.dataTransfer.getData("text");
             ev.path[1].appendChild(document.getElementById(data));
             finishFlag = true;
+            manualFlag = true;
         } else{
             alert('WOOP! YOU CAN\'T CAPTURE IT!\nOther piece there and can\'t capture that piece. Please choose another move.');
         }
@@ -326,6 +187,7 @@ function drop(ev) {
             var data = ev.dataTransfer.getData("text");
             ev.target.appendChild(document.getElementById(data));
             finishFlag = true;
+            manualFlag = true;
         } else { // automatically
             if (ev.target.childNodes.length <= 0){
                 console.log('****auto move: normal');
@@ -357,8 +219,116 @@ function drop(ev) {
         }
     }
     if (finishFlag){
+        if (manualFlag){
+            updateProgressCloud();
+        }
         nextRound();
     }
+}
+
+/*
+ *  GAME LOGIC: ROUND CONTROL
+ */
+
+function nextRound() {
+    console.log('--------------------next round');
+    // check win/lose in this round
+    if ((capture_ai >= 12) || (capture_you) >= 12){
+        stop();
+    }
+    turn = 1 - turn;
+    if (turn === 0){// not my turn
+        document.getElementById('turn').innerHTML = "It's "+oppoName+"'s Turn";
+        if (side == 1){
+            document.getElementById('turn').style.color = 'black';
+        } else {
+            document.getElementById('turn').style.color = 'red';
+        }
+        flagHere = "false";
+        flagValue = 0.5;
+        for (i = 0; i < 2; i++) { 
+            for (j = 0; j < 6; j++){
+                if (document.getElementById('p'+i+'-'+j)){
+                    document.getElementById('p'+i+'-'+j).style.opacity = flagValue;
+                    document.getElementById('p'+i+'-'+j).setAttribute("draggable", flagHere);
+                }
+            }
+        }
+        for (i = 4; i < 6; i++) { 
+            for (j = 0; j < 6; j++){
+                if (document.getElementById('p'+i+'-'+j)){
+                    document.getElementById('p'+i+'-'+j).style.opacity = flagValue;
+                    document.getElementById('p'+i+'-'+j).setAttribute("draggable", "false");
+                }
+            }
+        }
+    } else { // my turn
+        console.log('my turn');
+        document.getElementById('turn').innerHTML = "It's Your Turn";
+        if (side == 0){
+            document.getElementById('turn').style.color = 'black';
+        } else {
+            document.getElementById('turn').style.color = 'red';
+        }
+        if (side == 1){
+            flagHere = "true";
+            flagHere2 = "false";
+            flagValue = 1;
+            flagValue2=0.5;
+        } else {
+            flagHere = "false";
+            flagHere2 = "true";
+            flagValue = 0.5;
+            flagValue2 = 1;
+        }
+        for (i = 0; i < 2; i++) { 
+            for (j = 0; j < 6; j++){
+                if (document.getElementById('p'+i+'-'+j)){
+                    document.getElementById('p'+i+'-'+j).style.opacity = flagValue2;
+                    document.getElementById('p'+i+'-'+j).setAttribute("draggable", flagHere2);
+                }
+            }
+        }
+        for (i = 4; i < 6; i++) { 
+            for (j = 0; j < 6; j++){
+                if (document.getElementById('p'+i+'-'+j)){
+                    document.getElementById('p'+i+'-'+j).style.opacity = flagValue;
+                    document.getElementById('p'+i+'-'+j).setAttribute("draggable", flagHere);
+                }
+            }
+        }
+    }
+} 
+
+/*
+ *  CLOUD COMMUNICATION: FIREBASE
+ */
+
+function updateProgressCloud(){
+    var locForPieces = {};
+    for (i = 0; i < 2; i++){
+        for (j = 0; j < 6; j++){
+            if (document.getElementById('p'+i+'-'+j) != null){
+                locForPieces['p'+i+'-'+j] = document.getElementById('p'+i+'-'+j).parentElement.id;
+            } else {
+                // this piece is already been captured
+                locForPieces['p'+i+'-'+j] = 'captured';
+            }
+        }
+    }
+    for (i = 4; i < 6; i++){
+        for (j = 0; j < 6; j++){
+            if (document.getElementById('p'+i+'-'+j) != null){
+                locForPieces['p'+i+'-'+j] = document.getElementById('p'+i+'-'+j).parentElement.id;
+            } else {
+                // this piece is already been captured
+                locForPieces['p'+i+'-'+j] = 'captured';
+            }
+        }
+    }
+    database.ref('battle/'+session+'/board').set(locForPieces);
+    // update turn on DB, in case offline
+    database.ref('battle/'+session+'/turn').set(side);
 }
 
 function updateProgressLocal(board){
@@ -392,17 +362,47 @@ function updateProgressLocal(board){
     }
 }
 
-// UI
+/*
+ *  USER INTERFACE CONTROLS
+ */
+
+function initPieces(){
+    document.getElementById('startPage').style.display='none';
+    html = '';
+    for (i = 0; i < 2; i++) { 
+        html += '<tr>';
+        for (j = 0; j < 6; j++){
+            html += "<td id='b"+i+"-"+j+"' ondrop='drop(event)' ondragover='allowDrop(event)'><div id='p"+i+"-"+j+"' class='piece piece1' draggable='true' ondragstart='drag(event)'></div></td>"
+        }
+        html += '</tr>';
+    }
+    for (i = 2; i < 4; i++) { 
+        html += '<tr>';
+        for (j = 0; j < 6; j++){
+            html += "<td id='b"+i+"-"+j+"' ondrop='drop(event)' ondragover='allowDrop(event)'></td>"
+        }
+        html += '</tr>';
+    }
+    for (i = 4; i < 6; i++) { 
+        html += '<tr>';
+        for (j = 0; j < 6; j++){
+            html += "<td id='b"+i+"-"+j+"' ondrop='drop(event)' ondragover='allowDrop(event)'><div id='p"+i+"-"+j+"' class='piece piece2' draggable='true' ondragstart='drag(event)'></div></td>"
+        }
+        html += '</tr>';
+    }
+    document.getElementById('table').innerHTML = html;
+    // updateProgressCloud();
+    updateProgressCloud();
+    nextRound();
+}
 
 function startCreate(){
     // session = Date.now();
     session = 11;
     turn = 0;
     side = 1;
-    database.ref('battle/'+session).set({
-        user: {"0": "userID"},
-        turn: "0"
-    });
+    database.ref('battle/'+session+'/user/0').set("userID0");
+    database.ref('battle/'+session+'/turn').set(0);
     initPieces();
     var ref = database.ref("battle/"+session+"/board");
     ref.on("value", function(snapshot) {
@@ -415,8 +415,32 @@ function startJoin(){
     turn = 1;
     side = 0;
     initPieces();
-    var ref = database.ref("battle/"+session+"/board");
-    ref.on("value", function(snapshot) {
+    database.ref('battle/'+session+'/user/1').set("userID1");
+    database.ref("battle/"+session+"/board").on("value", function(snapshot) {
         updateProgressLocal(snapshot.val());
     });
+}
+
+function stop(){
+    if (capture_ai > capture_you){
+        alert('GAME STOP!\n'+oppoName+' Won!');
+    } else if (capture_ai < capture_you){
+        alert('GAME STOP!\nYou Won! Congratulations!');
+    } else {
+        alert('GAME STOP!\nYou and '+oppoName+' leave same amount of pieces on the board, nobody wins.');
+    }
+}
+
+function restart(){
+    location.reload();
+}
+
+function capture(){
+    if (turn === 0){ // now it's black turn, captured a red piece
+        capture_ai += 1;
+        document.getElementById('capture-ai').innerHTML = capture_ai;
+    } else {
+        capture_you += 1;
+        document.getElementById('capture-you').innerHTML = capture_you;
+    }
 }
