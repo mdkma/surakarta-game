@@ -18,6 +18,7 @@ var availableNormalMoves = [];
 var availableCaptures = [];
 
 function nextRound() {
+    console.log('--------------------next round');
     updateProgressCloud();
     // check win/lose in this round
     if ((capture_ai >= 12) || (capture_you) >= 12){
@@ -43,7 +44,6 @@ function nextRound() {
                 }
             }
         }
-        // setTimeout(function(){ callAIPerform(); }, 3000);
     } else {
         document.getElementById('turn').innerHTML = "It's Your Turn";
         document.getElementById('turn').style.color = 'red';
@@ -93,7 +93,6 @@ function capture(){
 // FIREBASE OPERATIONS
 
 function updateProgressCloud(){
-    console.log('saving to firebase');
     var locForPieces = {};
     for (i = 0; i < 2; i++){
         for (j = 0; j < 6; j++){
@@ -115,7 +114,6 @@ function updateProgressCloud(){
             }
         }
     }
-    console.log(locForPieces);
     database.ref('battle/').set({
         board: locForPieces
     });
@@ -294,7 +292,7 @@ function drop(ev) {
     // check whether don't move
     if (dragSrc === ev.target.id){
         alert('YOU ARE BACK!\nYou move this piece back to its original position. Please choose another move.');
-    } else if (ev.target.id[0] === 'p'){
+    } else if (ev.target.id[0] === 'p'){ // move manually on a piece
         if (availableCaptures.indexOf(ev.path[1].id) != -1){
             // real capture
             alert('CAPTURE!');
@@ -305,17 +303,32 @@ function drop(ev) {
             ev.path[1].appendChild(document.getElementById(data));
             finishFlag = true;
         } else{
-            // not capture
             alert('WOOP! YOU CAN\'T CAPTURE IT!\nOther piece there and can\'t capture that piece. Please choose another move.');
         }
     } else{
         // move to that location
-        if (ev.dataTransfer){
+        if (ev.dataTransfer){ // manually
+            console.log('****manually');
             var data = ev.dataTransfer.getData("text");
             ev.target.appendChild(document.getElementById(data));
             finishFlag = true;
-        } else {
-            ev.target.appendChild(document.getElementById(dragSrc));
+        } else { // automatically
+            if (ev.target.childNodes.length <= 0){
+                console.log('****auto move: normal');
+                // Case 2: nothing on that location, just move
+                ev.target.appendChild(document.getElementById(dragSrc));
+                finishFlag = true;
+            } else {
+                // Case 1: some pieces on that location, it's a capture
+                // real capture
+                console.log('****auto move: capture');
+                alert('CAPTURE!');
+                document.getElementById(ev.target.id).innerHTML = "";
+                capture();
+                // move to that location
+                ev.target.appendChild(document.getElementById(dragSrc));
+                finishFlag = true;
+            }
         }
     }
     // remove reminder border
@@ -331,5 +344,41 @@ function drop(ev) {
     }
     if (finishFlag){
         nextRound();
+    }
+}
+
+var ref = database.ref("battle/board");
+ref.on("value", function(snapshot) {
+    updateProgressLocal(snapshot.val());
+});
+
+function updateProgressLocal(board){
+    for (var key in board){
+        var loc = board[key];
+        // console.log('[][][][][]', key, loc);
+        if (document.getElementById(key) != null){
+            // this piece is still on the board
+            originalLoc = document.getElementById(key).parentElement.id;
+            // if (loc == "captured"){
+            //     // Case 1: it's a captured piece, but not dismissed on local board
+            //     alert('CAPTURE!');
+            //     document.getElementById(originalLoc).innerHTML = "";
+            //     capture();
+            // } else
+            if (originalLoc != loc && loc != "captured"){
+                // Case 2: it's a move, should move this piece to new location
+                // drop to that normal move
+                dragSrc = key;
+                var event = new DragEvent('drag');
+                targetPiece = document.getElementById(loc);
+                Object.defineProperty(event, 'target', {value: targetPiece, enumerable: true});
+                drop(event);
+            }
+        } else {
+            // this piece is not on the board, double check whether it's captured in DB
+            if (loc != "captured"){
+                console.error("DB_SYNC_ERROR: this piece should already captured, but DB shows not");
+            }
+        }
     }
 }
