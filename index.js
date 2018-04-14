@@ -1,14 +1,14 @@
 var database = firebase.database();
 
-function saveTest() {
-    window.alert("hhaha");
-    firebase.database().ref('users/').set({
-        t1: 'wo'
-    });
-    window.alert("555");
-}
+// function saveTest() {
+//     window.alert("hhaha");
+//     firebase.database().ref('users/').set({
+//         t1: 'wo'
+//     });
+//     window.alert("555");
+// }
 
-saveTest();
+// saveTest();
 
 var turn = 1; // 0 for black, 1 for red
 var capture_ai = 0;
@@ -18,6 +18,7 @@ var availableNormalMoves = [];
 var availableCaptures = [];
 
 function nextRound() {
+    updateProgressCloud();
     // check win/lose in this round
     if ((capture_ai >= 12) || (capture_you) >= 12){
         stop();
@@ -89,6 +90,38 @@ function capture(){
     }
 }
 
+// FIREBASE OPERATIONS
+
+function updateProgressCloud(){
+    console.log('saving to firebase');
+    var locForPieces = {};
+    for (i = 0; i < 2; i++){
+        for (j = 0; j < 6; j++){
+            if (document.getElementById('p'+i+'-'+j) != null){
+                locForPieces['p'+i+'-'+j] = document.getElementById('p'+i+'-'+j).parentElement.id;
+            } else {
+                // this piece is already been captured
+                locForPieces['p'+i+'-'+j] = 'captured';
+            }
+        }
+    }
+    for (i = 4; i < 6; i++){
+        for (j = 0; j < 6; j++){
+            if (document.getElementById('p'+i+'-'+j) != null){
+                locForPieces['p'+i+'-'+j] = document.getElementById('p'+i+'-'+j).parentElement.id;
+            } else {
+                // this piece is already been captured
+                locForPieces['p'+i+'-'+j] = 'captured';
+            }
+        }
+    }
+    console.log(locForPieces);
+    database.ref('battle/').set({
+        board: locForPieces
+    });
+
+}
+
 function initPieces(){
     document.getElementById('startPage').style.display='none';
     html = '';
@@ -114,6 +147,7 @@ function initPieces(){
         html += '</tr>';
     }
     document.getElementById('table').innerHTML = html;
+    // updateProgressCloud();
     nextRound();
 }
 
@@ -297,54 +331,5 @@ function drop(ev) {
     }
     if (finishFlag){
         nextRound();
-    }
-}
-
-function callAIPerform(){
-    setTimeout
-    var stopFlag = false;
-    var capturesPiece = "";
-    var movePiece = "";
-    // go through every board point find possible piece
-    var i = 0;
-    var j = 0;
-    while (!stopFlag && i < 6){
-        j = 0;
-        while (!stopFlag && j < 6){
-            var ele = document.getElementById('b'+j+'-'+i);
-            if (ele != null){
-                if (ele.childNodes.length > 0){
-                    if (ele.childNodes[0].id[1] < 3){ // this is a black piece
-                        detectAvailable(i, j, 'none', ele.childNodes[0].id);
-                        if (availableCaptures.length > 0){
-                            // console.log('----------possible capture!');
-                            capturesPiece = 'b'+j+'-'+i;
-                            stopFlag = true;
-                        } else if (availableNormalMoves.length > 0){
-                            // console.log('----------possible move!');
-                            movePiece = availableNormalMoves[0];
-                            stopFlag = true;
-                        }
-                        dragSrc = ele.childNodes[0].id;
-                    }
-                }
-            }
-            j += 1;
-        }
-        i += 1;
-    }
-    // drop that piece
-    if (capturesPiece != ""){
-        // drop to that capture point
-        // TODO: do capture automatically
-    } else if (movePiece != ""){
-        // drop to that normal move
-        var event = new DragEvent('drag');
-        targetPiece = document.getElementById(movePiece);
-        Object.defineProperty(event, 'target', {value: targetPiece, enumerable: true});
-        drop(event);
-        nextRound();
-    } else {
-        alert("AI can't find any possible move. AI is died!");
     }
 }
