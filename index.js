@@ -10,7 +10,9 @@ var database = firebase.database();
 
 // saveTest();
 
-var turn = 1; // 0 for black, 1 for red
+var session = -1;
+var side = 1; // 0 for black, 1 for red what color you want to use?
+var turn = 1; // 0 for me, 1 for competitor who frist?
 var capture_ai = 0;
 var capture_you = 0;
 var dragSrc = '';
@@ -25,41 +27,55 @@ function nextRound() {
         stop();
     }
     turn = 1 - turn;
-    if (turn === 0){//AI's turn
+    if (turn === 0){// not my turn
         document.getElementById('turn').innerHTML = "It's Mr. AI's Turn";
         document.getElementById('turn').style.color = 'black';
+        flagHere = "false";
+        flagValue = 0.5;
         for (i = 0; i < 2; i++) { 
             for (j = 0; j < 6; j++){
                 if (document.getElementById('p'+i+'-'+j)){
-                    document.getElementById('p'+i+'-'+j).style.opacity = 1;
-                    document.getElementById('p'+i+'-'+j).setAttribute("draggable", "true");
+                    document.getElementById('p'+i+'-'+j).style.opacity = flagValue;
+                    document.getElementById('p'+i+'-'+j).setAttribute("draggable", flagHere);
                 }
             }
         }
         for (i = 4; i < 6; i++) { 
             for (j = 0; j < 6; j++){
                 if (document.getElementById('p'+i+'-'+j)){
-                    document.getElementById('p'+i+'-'+j).style.opacity = 0.5;
+                    document.getElementById('p'+i+'-'+j).style.opacity = flagValue;
                     document.getElementById('p'+i+'-'+j).setAttribute("draggable", "false");
                 }
             }
         }
-    } else {
+    } else { // my turn
+        console.log('my turn');
         document.getElementById('turn').innerHTML = "It's Your Turn";
         document.getElementById('turn').style.color = 'red';
+        if (side == 1){
+            flagHere = "true";
+            flagHere2 = "false";
+            flagValue = 1;
+            flagValue2=0.5;
+        } else {
+            flagHere = "false";
+            flagHere2 = "true";
+            flagValue = 0.5;
+            flagValue2 = 1;
+        }
         for (i = 0; i < 2; i++) { 
             for (j = 0; j < 6; j++){
                 if (document.getElementById('p'+i+'-'+j)){
-                    document.getElementById('p'+i+'-'+j).style.opacity = 0.5;
-                    document.getElementById('p'+i+'-'+j).setAttribute("draggable", "false");
+                    document.getElementById('p'+i+'-'+j).style.opacity = flagValue2;
+                    document.getElementById('p'+i+'-'+j).setAttribute("draggable", flagHere2);
                 }
             }
         }
         for (i = 4; i < 6; i++) { 
             for (j = 0; j < 6; j++){
                 if (document.getElementById('p'+i+'-'+j)){
-                    document.getElementById('p'+i+'-'+j).style.opacity = 1;
-                    document.getElementById('p'+i+'-'+j).setAttribute("draggable", "true");
+                    document.getElementById('p'+i+'-'+j).style.opacity = flagValue;
+                    document.getElementById('p'+i+'-'+j).setAttribute("draggable", flagHere);
                 }
             }
         }
@@ -114,9 +130,7 @@ function updateProgressCloud(){
             }
         }
     }
-    database.ref('battle/').set({
-        board: locForPieces
-    });
+    database.ref('battle/'+session+'/board').set(locForPieces);
 
 }
 
@@ -347,11 +361,6 @@ function drop(ev) {
     }
 }
 
-var ref = database.ref("battle/board");
-ref.on("value", function(snapshot) {
-    updateProgressLocal(snapshot.val());
-});
-
 function updateProgressLocal(board){
     for (var key in board){
         var loc = board[key];
@@ -381,4 +390,33 @@ function updateProgressLocal(board){
             }
         }
     }
+}
+
+// UI
+
+function startCreate(){
+    // session = Date.now();
+    session = 11;
+    turn = 0;
+    side = 1;
+    database.ref('battle/'+session).set({
+        user: {"0": "userID"},
+        turn: "0"
+    });
+    initPieces();
+    var ref = database.ref("battle/"+session+"/board");
+    ref.on("value", function(snapshot) {
+        updateProgressLocal(snapshot.val());
+    });
+}
+
+function startJoin(){
+    session = 11; // session should be chosen
+    turn = 1;
+    side = 0;
+    initPieces();
+    var ref = database.ref("battle/"+session+"/board");
+    ref.on("value", function(snapshot) {
+        updateProgressLocal(snapshot.val());
+    });
 }
