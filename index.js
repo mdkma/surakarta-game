@@ -4,7 +4,7 @@ var database = firebase.database();
  *  INIT: SET GLOBAL VARIABLES
  */
 
-var session = -1;
+var session = 588;
 var side = 1; // 0 for black, 1 for red what color you want to use?
 var turn = 1; // 0 for me, 1 for competitor who frist?
 var capture_ai = 0;
@@ -13,6 +13,7 @@ var dragSrc = '';
 var availableNormalMoves = [];
 var availableCaptures = [];
 var oppoName = "derek"; //temp
+var myName = "me";
 
 /*
  *  GAME LOGIC: PATH FINDINGS
@@ -263,7 +264,6 @@ function nextRound() {
             }
         }
     } else { // my turn
-        console.log('my turn');
         document.getElementById('turn').innerHTML = "It's Your Turn";
         if (side == 0){
             document.getElementById('turn').style.color = 'black';
@@ -304,7 +304,7 @@ function nextRound() {
  *  CLOUD COMMUNICATION: FIREBASE
  */
 
-function updateProgressCloud(){
+function updateProgressCloud(sessionId){
     var locForPieces = {};
     for (i = 0; i < 2; i++){
         for (j = 0; j < 6; j++){
@@ -326,9 +326,10 @@ function updateProgressCloud(){
             }
         }
     }
-    database.ref('battle/'+session+'/board').set(locForPieces);
+    console.log("--------++", sessionId);
+    database.ref('battle/'+sessionId+'/board').set(locForPieces);
     // update turn on DB, in case offline
-    database.ref('battle/'+session+'/turn').set(side);
+    database.ref('battle/'+sessionId+'/turn').set(side);
 }
 
 function updateProgressLocal(board){
@@ -362,11 +363,36 @@ function updateProgressLocal(board){
     }
 }
 
+function getAvailableSessions(){
+    database.ref("battle").on("value", function(snapshot) {
+        allSessionsDetail = snapshot.val();
+        allSessions = [];
+        for (var sessionId in allSessionsDetail){
+            allSessions.push(sessionId);
+        }
+        console.log(allSessions);
+        // update real-time sessions condition in the UI
+        htmlCode = "";
+        if (allSessions.length == 0){
+            htmlCode += "<label class='btn btn-secondary sessionchoice'>"+
+                        "<input type='radio' name='options' autocomplete='off'> No available sessions yet, you can create one!"+
+                        "</label>";
+        } else{
+            for (session in allSessions) {
+                htmlCode += "<label class='btn btn-secondary sessionchoice' id='"+allSessions[session]+"' onclick='startJoin("+allSessions[session]+")'>" +
+                            "<input type='radio' name='options' autocomplete='off'>"+allSessions[session]+
+                            "</label>"
+            }
+        }
+        document.getElementById("allAvailableSessionDiv").innerHTML = htmlCode;
+    });
+}
+
 /*
  *  USER INTERFACE CONTROLS
  */
 
-function initPieces(){
+function initPieces(sessionId){
     document.getElementById('startPage').style.display='none';
     html = '';
     for (i = 0; i < 2; i++) { 
@@ -392,31 +418,59 @@ function initPieces(){
     }
     document.getElementById('table').innerHTML = html;
     // updateProgressCloud();
-    updateProgressCloud();
+    updateProgressCloud(sessionId);
     nextRound();
 }
 
 function startCreate(){
-    // session = Date.now();
-    session = 11;
+    // session = 11;
+    sessionId = Date.now();
+    document.getElementById("session-id-notice").innerHTML = "Session ID: "+sessionId;
     turn = 0;
     side = 1;
-    database.ref('battle/'+session+'/user/0').set("userID0");
-    database.ref('battle/'+session+'/turn').set(0);
-    initPieces();
-    var ref = database.ref("battle/"+session+"/board");
-    ref.on("value", function(snapshot) {
+    myName = document.getElementById('nameInput').value;
+    if (myName == ""){
+        myName = "you(creator)";
+    }
+    database.ref('battle/'+sessionId).set({
+        user: {0: myName},
+        turn: 0,
+        status: "waiting",
+    });
+    initPieces(sessionId);
+    document.getElementById("notice1").innerHTML = "Waiting for someone join this session...";
+    database.ref("battle/"+sessionId+"/status").on("value", function(snapshot) {
+        if (snapshot.val() == "active"){
+            database.ref("battle/"+sessionId+"/user/1").once("value", function(snapshot) {
+                console.log("+++", snapshot.val());
+                oppoName = snapshot.val();
+                document.getElementById("notice1").innerHTML = oppoName+" is playing with you";
+            });
+        }
+    });
+    database.ref("battle/"+sessionId+"/board").on("value", function(snapshot) {
         updateProgressLocal(snapshot.val());
     });
 }
 
-function startJoin(){
-    session = 11; // session should be chosen
+function startJoin(sessionname){
+    console.log(sessionname);
+    document.getElementById("session-id-notice").innerHTML = "Session ID: "+sessionname;
+    sessionId = parseInt(sessionname); // session should be chosen
     turn = 1;
     side = 0;
-    initPieces();
-    database.ref('battle/'+session+'/user/1').set("userID1");
-    database.ref("battle/"+session+"/board").on("value", function(snapshot) {
+    myName = document.getElementById('nameInput').value;
+    if (myName == ""){
+        myName = "you(joiner)";
+    }
+    initPieces(sessionId);
+    database.ref('battle/'+sessionId+'/user/1').set(myName);
+    database.ref('battle/'+sessionId+'/status').set("active");
+    database.ref("battle/"+sessionId+"/user/0").on("value", function(snapshot) {
+        oppoName = snapshot.val();
+        document.getElementById("notice1").innerHTML = oppoName+" is playing with you";
+    });
+    database.ref("battle/"+sessionId+"/board").on("value", function(snapshot) {
         updateProgressLocal(snapshot.val());
     });
 }
@@ -429,6 +483,7 @@ function stop(){
     } else {
         alert('GAME STOP!\nYou and '+oppoName+' leave same amount of pieces on the board, nobody wins.');
     }
+    database.ref('battle/'+session+'/status').set("inactive");
 }
 
 function restart(){

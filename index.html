@@ -8,10 +8,24 @@
 </head>
 <body>
 <div id="startPage">
-    <h1 class="display-2 mb-3" id='welcome'>Welcome to play Surakarta Game!</h1>
-    <button id="startbtn" type="button" class="btn btn-primary btn-lg btn-block mt-3" onclick="startCreate()">CREATE a Session!</button>
-    <button id="startbtn-join" type="button" class="btn btn-primary btn-lg btn-block mt-3" onclick="startJoin()">JOIN a Session!</button>
-    <a href="README.html" target="_blank"><button id="startbtn" type="button" class="btn btn-secondary btn-lg btn-block mt-3">Learn Rules in README</button></a>
+    <h1 class="display-4 mb-3" id='welcome'>Welcome to play Surakarta Game!</h1>
+    <a href="README.html" target="_blank"><button id="readme-btn" type="button" class="btn btn-outline-light btn-lg btn-block mt-3">Learn Rules in README</button></a>
+    <div class="form-group mt-3">
+        <label for="nameInput" style="color:white">Your name</label>
+        <input type="email" class="form-control" id="nameInput" placeholder="Please input your name, like Vincent">
+    </div>
+    <h2 class="display-5 mb-3 mt-3" class="optionsnotice">Option 1: CREATE a Session</h2>
+    <button id="startbtn" type="button" class="btn btn-primary btn-lg btn-block mt-3" onclick="startCreate()">CREATE</button>
+    <h2 class="display-5 mb-3 mt-3" class="optionsnotice">Option 2: Choose a Session to JOIN</h2>
+    <div>
+        <p class="smallnotice">All available sessions:</p>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons" id="allAvailableSessionDiv">
+            <label class="btn btn-secondary">
+                <input type="radio" name="options" id="option1" autocomplete="off"> Loading...
+            </label>
+        </div>
+    </div>
+    <!-- <button id="startbtn-join" type="button" class="btn btn-primary btn-lg btn-block mt-3" onclick="startJoin()">JOIN</button> -->
 </div>
 <table id='table'></table>
 <div id="board">
@@ -40,7 +54,8 @@
 </div>
 <div id='noticeBoard'>
     <h2 id='turn' class='display-2'>It's Mr. AI's Turn</h2>
-    <h5>You are red, Mr. AI is black.</h5>
+    <h5 id="notice1">You are red, Mr. AI is black.</h5>
+    <h5 id="session-id-notice"></h5>
     </br>
     <p>Mr. AI has captured your pieces: <div id='capture-ai'>0</div> </p>
     <p>You have captured Mr. AI's pieces: <div id='capture-you'>0</div> </p>
@@ -65,5 +80,11 @@
     firebase.initializeApp(config);
 </script>
 <script src="index.js"></script>
+<script>
+    getAvailableSessions();
+    if (document.getElementsByClassName('sessionchoice').checked = true){
+        console.log('1');
+    }
+</script>
 </body>
 </html>

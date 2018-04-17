@@ -9,7 +9,7 @@
 
 #welcome {
     color: white;
-    margin-top: 200px;
+    margin-top: 100px;
     margin-left: 100px;
 }
 
@@ -17,14 +17,42 @@
     margin-left: 100px;
 }
 
+h2 {
+    color: white;
+    margin-left: 100px;
+}
+
+.form-group {
+    width: 400px;
+    margin-left: 100px;
+}
+
+#turn {
+    margin-left: 0px;
+}
+
+.smallnotice {
+    color: white;
+    margin-left: 150px;
+}
+
+#allAvailableSessionDiv {
+    margin-left: 150px;
+}
+
 #startbtn {
+    width: 400px;
+    margin-left: 150px;
+}
+
+#readme-btn {
     width: 400px;
     margin-left: 100px;
 }
 
 #startbtn-join {
     width: 400px;
-    margin-left: 100px;
+    margin-left: 150px;
 }
 
 td {
