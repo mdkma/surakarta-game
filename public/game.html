@@ -5,15 +5,17 @@
     <title>Surakarta Game - Mingyu MA/Derek</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="index.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.css" />
 </head>
 <body>
 <div id="startPage">
     <h1 class="display-4 mb-3" id='welcome'>Welcome to play Surakarta Game!</h1>
     <a href="README.html" target="_blank"><button id="readme-btn" type="button" class="btn btn-outline-light btn-lg btn-block mt-3">Learn Rules in README</button></a>
-    <div class="form-group mt-3">
+    <p id="login-name-display" class="mt-3"></p>
+    <!-- <div class="form-group mt-3">
         <label for="nameInput" style="color:white">Your name</label>
         <input type="email" class="form-control" id="nameInput" placeholder="Please input your name, like Vincent">
-    </div>
+    </div> -->
     <h2 class="display-5 mb-3 mt-3" class="optionsnotice">Option 1: CREATE a Session</h2>
     <button id="startbtn" type="button" class="btn btn-primary btn-lg btn-block mt-3" onclick="startCreate()">CREATE</button>
     <h2 class="display-5 mb-3 mt-3" class="optionsnotice">Option 2: Choose a Session to JOIN</h2>
@@ -54,11 +56,12 @@
 </div>
 <div id='noticeBoard'>
     <h2 id='turn' class='display-2'>It's Mr. AI's Turn</h2>
+    <p id="login-name-display2" class="mt-3"></p>
     <h5 id="notice1">You are red, Mr. AI is black.</h5>
     <h5 id="session-id-notice"></h5>
     </br>
-    <p>Mr. AI has captured your pieces: <div id='capture-ai'>0</div> </p>
-    <p>You have captured Mr. AI's pieces: <div id='capture-you'>0</div> </p>
+    <p>Number of your pieces been captured: <div id='capture-ai'>0</div> </p>
+    <p>Number of opposite side's pieces been captured: <div id='capture-you'>0</div> </p>
     <button type="button" class="btn btn-danger" onclick="stop()">STOP</button>
     <button type="button" class="btn btn-primary" onclick="restart()">RESTART</button>
     <p class="mt-3">&copy; <a href="http://derek.ma" target="_blank">Mingyu MA / Derek</a></p>
@@ -67,7 +70,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
-<script>
+<script src="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.js"></script>
+<!-- <script>
     // Initialize Firebase
     var config = {
     apiKey: "AIzaSyAFHtIjAY6-mYKkdunVjxfGpMh4_XpDEcg",
@@ -78,7 +82,9 @@
     messagingSenderId: "700467893016"
     };
     firebase.initializeApp(config);
-</script>
+</script> -->
+<script src="scripts/firebaseInit.js"></script>
+<script src="scripts/firebaseAuth.js"></script>
 <script src="index.js"></script>
 <script>
     getAvailableSessions();

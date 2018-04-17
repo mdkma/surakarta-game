@@ -15,6 +15,19 @@ var availableCaptures = [];
 var oppoName = "derek"; //temp
 var myName = "me";
 
+firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+      // User is signed in.
+      document.getElementById("login-name-display").innerHTML = "You've logged in as "+user.email;
+      myName = user.email;
+      document.getElementById("login-name-display2").innerHTML = "You've logged in as "+user.email;
+    } else {
+      // No user is signed in.
+      document.getElementById("login-name-display").innerHTML = "You are not logged in yet.";
+      document.getElementById("login-name-display2").innerHTML = "You are not logged in yet.";
+    }
+  });
+
 /*
  *  GAME LOGIC: PATH FINDINGS
  */
@@ -239,7 +252,7 @@ function nextRound() {
     }
     turn = 1 - turn;
     if (turn === 0){// not my turn
-        document.getElementById('turn').innerHTML = "It's "+oppoName+"'s Turn";
+        document.getElementById('turn').innerHTML = "It's not your turn";
         if (side == 1){
             document.getElementById('turn').style.color = 'black';
         } else {
@@ -264,7 +277,7 @@ function nextRound() {
             }
         }
     } else { // my turn
-        document.getElementById('turn').innerHTML = "It's Your Turn";
+        document.getElementById('turn').innerHTML = "It's your turn";
         if (side == 0){
             document.getElementById('turn').style.color = 'black';
         } else {
@@ -326,7 +339,6 @@ function updateProgressCloud(sessionId){
             }
         }
     }
-    console.log("--------++", sessionId);
     database.ref('battle/'+sessionId+'/board').set(locForPieces);
     // update turn on DB, in case offline
     database.ref('battle/'+sessionId+'/turn').set(side);
@@ -368,9 +380,11 @@ function getAvailableSessions(){
         allSessionsDetail = snapshot.val();
         allSessions = [];
         for (var sessionId in allSessionsDetail){
-            allSessions.push(sessionId);
+            if (allSessionsDetail[sessionId].status == "waiting"){
+                allSessions.push(sessionId);
+            }
         }
-        console.log(allSessions);
+        // console.log(allSessions);
         // update real-time sessions condition in the UI
         htmlCode = "";
         if (allSessions.length == 0){
@@ -428,10 +442,10 @@ function startCreate(){
     document.getElementById("session-id-notice").innerHTML = "Session ID: "+sessionId;
     turn = 0;
     side = 1;
-    myName = document.getElementById('nameInput').value;
-    if (myName == ""){
-        myName = "you(creator)";
-    }
+    // myName = document.getElementById('nameInput').value;
+    // if (myName == ""){
+    //     myName = "you(creator)";
+    // }
     database.ref('battle/'+sessionId).set({
         user: {0: myName},
         turn: 0,
@@ -459,10 +473,10 @@ function startJoin(sessionname){
     sessionId = parseInt(sessionname); // session should be chosen
     turn = 1;
     side = 0;
-    myName = document.getElementById('nameInput').value;
-    if (myName == ""){
-        myName = "you(joiner)";
-    }
+    // myName = document.getElementById('nameInput').value;
+    // if (myName == ""){
+    //     myName = "you(joiner)";
+    // }
     initPieces(sessionId);
     database.ref('battle/'+sessionId+'/user/1').set(myName);
     database.ref('battle/'+sessionId+'/status').set("active");

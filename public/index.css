@@ -27,6 +27,11 @@ h2 {
     margin-left: 100px;
 }
 
+#login-name-display {
+    color: white;
+    margin-left: 100px;
+}
+
 #turn {
     margin-left: 0px;
 }
