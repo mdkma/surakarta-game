@@ -2,6 +2,9 @@
 
 Mingyu MA/Derek :: [derek.ma](http://derek.ma) :: derek.ma@connect.polyu.hk
 
+<center>**Play the game at the following link!**</center>
+<center>https://sarakarta-battle.firebaseapp.com</center>
+
 ## Rules
 
 ### Goal
