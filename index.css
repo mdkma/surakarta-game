@@ -22,6 +22,11 @@
     margin-left: 100px;
 }
 
+#startbtn-join {
+    width: 400px;
+    margin-left: 100px;
+}
+
 td {
     width: 100px;
     height: 100px;
