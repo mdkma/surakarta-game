@@ -13,6 +13,21 @@ var database = firebase.database();
 
 var user;
 var name, email, photoUrl, uid;
+
+function initLeaderboard(_uid, _name) {
+	var postData = {
+	    name: _name,
+	    score: 1200,
+	    wins: 0,
+	    losses: 0
+	};
+	var updates = {};
+	updates['/leaderboard/' + uid] = postData;
+	database.ref().update(updates);
+}
+
+
+
 firebase.auth().onAuthStateChanged(function(_user) {
 	user = _user;
 	if (user != null) {
@@ -22,5 +37,12 @@ firebase.auth().onAuthStateChanged(function(_user) {
 		uid = user.uid; // The user's ID, unique to the Firebase project. Do NOT use
 		               	// this value to authenticate with your backend server, if
 		               	// you have one. Use User.getToken() instead.
+
+		database.ref('/leaderboard/' + uid).once('value').then(function(snapshot) {
+			if (snapshot.val()==null) {
+				console.log("create new leaderboard");
+				initLeaderboard(uid, name);
+			}
+		});
 	}
 });
