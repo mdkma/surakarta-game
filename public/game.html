@@ -10,8 +10,14 @@
 <body>
 <div id="startPage">
     <h1 class="display-4 mb-3" id='welcome'>Welcome to play Surakarta Game!</h1>
-    <a href="README.html" target="_blank"><button id="readme-btn" type="button" class="btn btn-outline-light btn-lg btn-block mt-3">Learn Rules in README</button></a>
-    <p id="login-name-display" class="mt-3"></p>
+    <div class="container">
+        <div class="row">
+            <a href="leaderboard.html" target="_blank"><button id="learder-board-btn" type="button" class="btn btn-outline-light btn-lg btn-block mt-3 col mr-3">Leader Board</button></a>
+            <a href="map.html" target="_blank"><button id="map-btn" type="button" class="btn btn-outline-light btn-lg btn-block mt-3 col mr-3 ml-3">Locations of All Players</button></a>
+            <a href="README.html" target="_blank"><button id="readme-btn" type="button" class="btn btn-outline-light btn-lg btn-block mt-3 col mr-3 ml-3">Learn Rules in README</button></a>
+        </div>
+    </div>
+        <p id="login-name-display" class="mt-3"></p>
     <!-- <div class="form-group mt-3">
         <label for="nameInput" style="color:white">Your name</label>
         <input type="email" class="form-control" id="nameInput" placeholder="Please input your name, like Vincent">

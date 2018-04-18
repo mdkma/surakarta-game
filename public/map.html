@@ -20,6 +20,10 @@
   </head>
   <body>
     <div id="map"></div>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-database.js"></script>
+    <script src="scripts/firebaseInit.js"></script>
     <script>
     var locations = [
         ["Split",     43.5148515, 16.4490835],
@@ -28,32 +32,39 @@
     ];
 
     function initMap(){
-
         var infowindow = new google.maps.InfoWindow(); /* SINGLE */
         var map = new google.maps.Map(document.getElementById('map'), {
             zoom: 4,
-            center: new google.maps.LatLng(45, 15)
+            center: new google.maps.LatLng(22, 114)
         });
 
-        function placeMarker( loc ) {
-        var latLng = new google.maps.LatLng( loc[1], loc[2]);
-        var marker = new google.maps.Marker({
-            position : latLng,
-            map      : map
-        });
-        google.maps.event.addListener(marker, 'click', function(){
-            infowindow.close(); // Close previously opened infowindow
-            infowindow.setContent( "<div id='infowindow'>"+ loc[0] +"</div>");
-            infowindow.open(map, marker);
-        });
+        function placeMarker( detail ) {
+            var latLng = new google.maps.LatLng( detail.loc.lat, detail.loc.lng);
+            var marker = new google.maps.Marker({
+                position : latLng,
+                map      : map
+            });
+            google.maps.event.addListener(marker, 'click', function(){
+                infowindow.close(); // Close previously opened infowindow
+                infowindow.setContent(detail.email+"\n Win: "+detail.wins+"\n Lose: "+detail.losses);
+                infowindow.open(map, marker);
+            });
         }
+
+        database.ref("leaderboard").on("value", function(snapshot) {
+            userProfile = snapshot.val();
+            for (i in userProfile) {
+                placeMarker(userProfile[i]);
+            }
+        });
+
         // ITERATE ALL LOCATIONS
         // Don't create functions inside for loops
         // therefore refer to a previously created function
         // and pass your iterating location as argument value:
-        for(var i=0; i<locations.length; i++) {
-        placeMarker( locations[i] );
-        } 
+        // for(var i=0; i<locations.length; i++) {
+        // placeMarker( locations[i] );
+        // } 
     }
     // google.maps.event.addDomListener(window, 'load', initGoogleMap);
 
