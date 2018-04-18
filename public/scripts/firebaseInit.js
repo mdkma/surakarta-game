@@ -1,12 +1,12 @@
 // Initialize Firebase
 var config = {
-    apiKey: "AIzaSyAFHtIjAY6-mYKkdunVjxfGpMh4_XpDEcg",
-    authDomain: "sarakarta-battle.firebaseapp.com",
-    databaseURL: "https://sarakarta-battle.firebaseio.com",
-    projectId: "sarakarta-battle",
-    storageBucket: "sarakarta-battle.appspot.com",
-    messagingSenderId: "700467893016"
-};
+    apiKey: "AIzaSyAGrQb35wvwEt6BVfHfzBfhRclRTiAsYgI",
+    authDomain: "sarakarta-game.firebaseapp.com",
+    databaseURL: "https://sarakarta-game.firebaseio.com",
+    projectId: "sarakarta-game",
+    storageBucket: "sarakarta-game.appspot.com",
+    messagingSenderId: "903935335659"
+  };
 firebase.initializeApp(config);
 
 var database = firebase.database();
