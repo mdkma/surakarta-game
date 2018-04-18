@@ -14,9 +14,10 @@ var database = firebase.database();
 var user;
 var name, email, photoUrl, uid;
 
-function initLeaderboard(_uid, _name) {
+function initLeaderboard(_uid, _name, _email) {
 	var postData = {
-	    name: _name,
+        name: _name,
+        email: _email,
 	    score: 1200,
 	    wins: 0,
 	    losses: 0
@@ -27,9 +28,9 @@ function initLeaderboard(_uid, _name) {
 }
 
 
-
 firebase.auth().onAuthStateChanged(function(_user) {
-	user = _user;
+    user = _user;
+    console.log(user.email);
 	if (user != null) {
 		name = user.displayName;
 		email = user.email;
@@ -40,8 +41,8 @@ firebase.auth().onAuthStateChanged(function(_user) {
 
 		database.ref('/leaderboard/' + uid).once('value').then(function(snapshot) {
 			if (snapshot.val()==null) {
-				console.log("create new leaderboard");
-				initLeaderboard(uid, name);
+				console.log("create new leaderboard!");
+				initLeaderboard(uid, name, email);
 			}
 		});
 	}

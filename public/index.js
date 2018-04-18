@@ -17,10 +17,25 @@ var myName = "me";
 
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
-      // User is signed in.
-      document.getElementById("login-name-display").innerHTML = "You've logged in as "+user.email;
-      myName = user.email;
-      document.getElementById("login-name-display2").innerHTML = "You've logged in as "+user.email;
+        // User is signed in.
+        document.getElementById("login-name-display").innerHTML = "You've logged in as "+user.email;
+        myName = user.email;
+        document.getElementById("login-name-display2").innerHTML = "You've logged in as "+user.email;
+        // update location for this user
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                var pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                database.ref('leaderboard/'+user.uid+'/loc').set(pos);
+            }, function() {
+                alert("Please open localization function for the browser.");
+            });
+        } else {
+        // Browser doesn't support Geolocation
+            alert("Please open localization function for the browser.");
+        }
     } else {
       // No user is signed in.
       document.getElementById("login-name-display").innerHTML = "You are not logged in yet.";
