@@ -36,6 +36,15 @@ firebase.auth().onAuthStateChanged(function(user) {
         // Browser doesn't support Geolocation
             alert("Please open localization function for the browser.");
         }
+        database.ref("leaderboard/"+user.uid).once("value", function(snapshot) {
+            userInfo = snapshot.val();
+            if (userInfo.gender != null ){
+                document.getElementById("genderInput").value = userInfo.gender;
+            }
+            if (userInfo.age != null){
+                document.getElementById("ageInput").value = userInfo.age;
+            }
+        });
     } else {
       // No user is signed in.
       document.getElementById("login-name-display").innerHTML = "You are not logged in yet.";
@@ -453,55 +462,73 @@ function initPieces(sessionId){
 
 function startCreate(){
     // session = 11;
-    sessionId = Date.now();
-    document.getElementById("session-id-notice").innerHTML = "Session ID: "+sessionId;
-    turn = 0;
-    side = 1;
-    // myName = document.getElementById('nameInput').value;
-    // if (myName == ""){
-    //     myName = "you(creator)";
-    // }
-    database.ref('battle/'+sessionId).set({
-        user: {0: myName},
-        turn: 0,
-        status: "waiting",
-    });
-    initPieces(sessionId);
-    document.getElementById("notice1").innerHTML = "Waiting for someone join this session...";
-    database.ref("battle/"+sessionId+"/status").on("value", function(snapshot) {
-        if (snapshot.val() == "active"){
-            database.ref("battle/"+sessionId+"/user/1").once("value", function(snapshot) {
-                console.log("+++", snapshot.val());
-                oppoName = snapshot.val();
-                document.getElementById("notice1").innerHTML = oppoName+" is playing with you";
-            });
-        }
-    });
-    database.ref("battle/"+sessionId+"/board").on("value", function(snapshot) {
-        updateProgressLocal(snapshot.val());
-    });
+    if (firebase.auth().currentUser == null){
+        alert("Sign in first please!");
+    } else{
+        sessionId = Date.now();
+        document.getElementById("session-id-notice").innerHTML = "Session ID: "+sessionId;
+        turn = 0;
+        side = 1;
+        // save gender and age to the cloud
+        input_gender = document.getElementById("genderInput").value;
+        input_age = document.getElementById("ageInput").value;
+        database.ref('leaderboard/'+firebase.auth().currentUser.uid+'/gender').set(input_gender);
+        database.ref('leaderboard/'+firebase.auth().currentUser.uid+'/age').set(input_age);
+        // myName = document.getElementById('nameInput').value;
+        // if (myName == ""){
+        //     myName = "you(creator)";
+        // }
+        database.ref('battle/'+sessionId).set({
+            user: {0: myName},
+            turn: 0,
+            status: "waiting",
+        });
+        initPieces(sessionId);
+        document.getElementById("notice1").innerHTML = "Waiting for someone join this session...";
+        database.ref("battle/"+sessionId+"/status").on("value", function(snapshot) {
+            if (snapshot.val() == "active"){
+                database.ref("battle/"+sessionId+"/user/1").once("value", function(snapshot) {
+                    console.log("+++", snapshot.val());
+                    oppoName = snapshot.val();
+                    document.getElementById("notice1").innerHTML = oppoName+" is playing with you";
+                });
+            }
+        });
+        database.ref("battle/"+sessionId+"/board").on("value", function(snapshot) {
+            updateProgressLocal(snapshot.val());
+        });
+    }
 }
 
 function startJoin(sessionname){
     console.log(sessionname);
-    document.getElementById("session-id-notice").innerHTML = "Session ID: "+sessionname;
-    sessionId = parseInt(sessionname); // session should be chosen
-    turn = 1;
-    side = 0;
-    // myName = document.getElementById('nameInput').value;
-    // if (myName == ""){
-    //     myName = "you(joiner)";
-    // }
-    initPieces(sessionId);
-    database.ref('battle/'+sessionId+'/user/1').set(myName);
-    database.ref('battle/'+sessionId+'/status').set("active");
-    database.ref("battle/"+sessionId+"/user/0").on("value", function(snapshot) {
-        oppoName = snapshot.val();
-        document.getElementById("notice1").innerHTML = oppoName+" is playing with you";
-    });
-    database.ref("battle/"+sessionId+"/board").on("value", function(snapshot) {
-        updateProgressLocal(snapshot.val());
-    });
+    if (firebase.auth().currentUser == null){
+        alert("Sign in first please!");
+    } else{
+        document.getElementById("session-id-notice").innerHTML = "Session ID: "+sessionname;
+        sessionId = parseInt(sessionname); // session should be chosen
+        turn = 1;
+        side = 0;
+        // save gender and age to the cloud
+        input_gender = document.getElementById("genderInput").value;
+        input_age = document.getElementById("ageInput").value;
+        database.ref('leaderboard/'+firebase.auth().currentUser.uid+'/gender').set(input_gender);
+        database.ref('leaderboard/'+firebase.auth().currentUser.uid+'/age').set(input_age);
+        // myName = document.getElementById('nameInput').value;
+        // if (myName == ""){
+        //     myName = "you(joiner)";
+        // }
+        initPieces(sessionId);
+        database.ref('battle/'+sessionId+'/user/1').set(myName);
+        database.ref('battle/'+sessionId+'/status').set("active");
+        database.ref("battle/"+sessionId+"/user/0").on("value", function(snapshot) {
+            oppoName = snapshot.val();
+            document.getElementById("notice1").innerHTML = oppoName+" is playing with you";
+        });
+        database.ref("battle/"+sessionId+"/board").on("value", function(snapshot) {
+            updateProgressLocal(snapshot.val());
+        });
+    }
 }
 
 function stop(){

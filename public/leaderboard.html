@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Leader Board</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-database.js"></script>
+    <script src="scripts/firebaseInit.js"></script>
+    <script>
+    function loadBoard(){
+        database.ref("leaderboard").on("value", function(snapshot) {
+            userProfile = snapshot.val();
+            for (i in userProfile) {
+                placeMarker(userProfile[i]);
+            }
+        });
+    }
+    loadBoard();
+    </script>
+  </body>
+</html>

@@ -25,12 +25,6 @@
     <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-database.js"></script>
     <script src="scripts/firebaseInit.js"></script>
     <script>
-    var locations = [
-        ["Split",     43.5148515, 16.4490835],
-        ["Zagreb",    45.840196,  15.9643316],
-        ["Dubrovnik", 42.6457256, 18.094058]
-    ];
-
     function initMap(){
         var infowindow = new google.maps.InfoWindow(); /* SINGLE */
         var map = new google.maps.Map(document.getElementById('map'), {
@@ -57,24 +51,7 @@
                 placeMarker(userProfile[i]);
             }
         });
-
-        // ITERATE ALL LOCATIONS
-        // Don't create functions inside for loops
-        // therefore refer to a previously created function
-        // and pass your iterating location as argument value:
-        // for(var i=0; i<locations.length; i++) {
-        // placeMarker( locations[i] );
-        // } 
     }
-    // google.maps.event.addDomListener(window, 'load', initGoogleMap);
-
-      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-        infoWindow.setPosition(pos);
-        infoWindow.setContent(browserHasGeolocation ?
-                              'Error: The Geolocation service failed.' :
-                              'Error: Your browser doesn\'t support geolocation.');
-        infoWindow.open(map);
-      }
     </script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyActF4mdCHExRMF3kkNZE_VYkd8OU8ae50&callback=initMap">
