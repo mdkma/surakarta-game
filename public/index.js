@@ -14,6 +14,7 @@ var availableNormalMoves = [];
 var availableCaptures = [];
 var oppoName = "derek"; //temp
 var myName = "me";
+var session_global = 0;
 
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
@@ -176,8 +177,11 @@ function search(my_x, my_y, prev_x, prev_y, start_x, start_y, circle) {
 
 function drag(ev) {
     // console.log('move from: ', ev.path[1].id);
-    dragSrc = ev.path[0].id;
-    var id = ev.path[1].id;
+    console.log(ev);
+    // dragSrc = ev.path[0].id;
+    // var id = ev.path[1].id;
+    dragSrc = ev.target.id;
+    var id = ev.target.parentElement.id;
     var x = parseInt(id[3]);
     var y = parseInt(id[1]);
     ev.dataTransfer.setData("text", ev.target.id);
@@ -258,7 +262,8 @@ function drop(ev) {
     }
     if (finishFlag){
         if (manualFlag){
-            updateProgressCloud();
+            console.log(session_global);
+            updateProgressCloud(session_global);
         }
         nextRound();
     }
@@ -465,7 +470,8 @@ function startCreate(){
     if (firebase.auth().currentUser == null){
         alert("Sign in first please!");
     } else{
-        sessionId = Date.now();
+        var sessionId = Date.now();
+        session_global = sessionId;
         document.getElementById("session-id-notice").innerHTML = "Session ID: "+sessionId;
         turn = 0;
         side = 1;
@@ -507,6 +513,7 @@ function startJoin(sessionname){
     } else{
         document.getElementById("session-id-notice").innerHTML = "Session ID: "+sessionname;
         sessionId = parseInt(sessionname); // session should be chosen
+        session_global = sessionId;
         turn = 1;
         side = 0;
         // save gender and age to the cloud
@@ -514,16 +521,19 @@ function startJoin(sessionname){
         input_age = document.getElementById("ageInput").value;
         database.ref('leaderboard/'+firebase.auth().currentUser.uid+'/gender').set(input_gender);
         database.ref('leaderboard/'+firebase.auth().currentUser.uid+'/age').set(input_age);
-        // myName = document.getElementById('nameInput').value;
-        // if (myName == ""){
-        //     myName = "you(joiner)";
-        // }
         initPieces(sessionId);
         database.ref('battle/'+sessionId+'/user/1').set(myName);
         database.ref('battle/'+sessionId+'/status').set("active");
         database.ref("battle/"+sessionId+"/user/0").on("value", function(snapshot) {
             oppoName = snapshot.val();
             document.getElementById("notice1").innerHTML = oppoName+" is playing with you";
+        });
+        database.ref("battle/"+session_global+"/status").on("value", function(snapshot){
+            // stop this round, if get signal from other side, then "stop" is pressed
+            if (snapshot.val() == "terminated") {
+                // stop from other side
+                stop();
+            }
         });
         database.ref("battle/"+sessionId+"/board").on("value", function(snapshot) {
             updateProgressLocal(snapshot.val());
@@ -533,11 +543,25 @@ function startJoin(sessionname){
 
 function stop(){
     if (capture_ai > capture_you){
-        alert('GAME STOP!\n'+oppoName+' Won!');
+        alert('GAME STOP!\n'+oppoName+' Won!\nPlease start a new game!');
+        // save lose result to database
+        database.ref("leaderboard/"+firebase.auth().currentUser.uid+"/losses").once("value", function(snapshot) {
+            var current_losses = snapshot.val();
+            console.log(current_losses);
+            database.ref("leaderboard/"+firebase.auth().currentUser.uid+"/losses").set(current_losses + 1);
+            database.ref("battle/"+session_global+"/status").set("terminated"); // stop this round
+        });
     } else if (capture_ai < capture_you){
-        alert('GAME STOP!\nYou Won! Congratulations!');
+        alert('GAME STOP!\nYou Won! Congratulations!\nPlease start a new game!');
+        // save win result to database
+        database.ref("leaderboard/"+firebase.auth().currentUser.uid+"/wins").once("value", function(snapshot) {
+            var current_wins = snapshot.val();
+            console.log(current_wins);
+            database.ref("leaderboard/"+firebase.auth().currentUser.uid+"/wins").set(current_wins + 1);
+            database.ref("battle/"+session_global+"/status").set("terminated"); // stop this round
+        });
     } else {
-        alert('GAME STOP!\nYou and '+oppoName+' leave same amount of pieces on the board, nobody wins.');
+        alert('GAME STOP!\nYou and '+oppoName+' leave same amount of pieces on the board, nobody wins.\nPlease start a new game!');
     }
     database.ref('battle/'+session+'/status').set("inactive");
 }

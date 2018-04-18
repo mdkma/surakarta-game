@@ -37,7 +37,7 @@
       function loadBoard(param){
           console.log(param);
           if (param == "overall"){
-              database.ref("leaderboard").orderByChild('wins').limitToFirst(5).on("value", function(snapshot) {
+              database.ref("leaderboard").orderByChild('wins').limitToLast(5).on("value", function(snapshot) {
                   userProfile = snapshot.val();
                   userArray = []
                   for (i in userProfile) {
@@ -55,7 +55,7 @@
                   drawChart(input_data)
               });
           } else if (param == "cateByGenderM"){
-              database.ref("leaderboard").orderByChild('gender').equalTo("Male").limitToFirst(5).on("value", function(snapshot) {
+              database.ref("leaderboard").orderByChild('gender').equalTo("Male").on("value", function(snapshot) {
                   userProfile = snapshot.val();
                   console.log(userProfile);
                   userArray = []
@@ -74,7 +74,7 @@
                   drawChart(input_data)
               });
           } else if (param == "cateByGenderF"){
-              database.ref("leaderboard").orderByChild('gender').equalTo("Female").limitToFirst(5).on("value", function(snapshot) {
+              database.ref("leaderboard").orderByChild('gender').equalTo("Female").on("value", function(snapshot) {
                   userProfile = snapshot.val();
                   console.log(userProfile);
                   userArray = []
@@ -93,7 +93,7 @@
                   drawChart(input_data)
               });
           } else if (param == "cateByGenderU"){
-              database.ref("leaderboard").orderByChild('gender').equalTo("Unclassified").limitToFirst(5).on("value", function(snapshot) {
+              database.ref("leaderboard").orderByChild('gender').equalTo("Unclassified").on("value", function(snapshot) {
                   userProfile = snapshot.val();
                   console.log(userProfile);
                   userArray = []
