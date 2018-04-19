@@ -15,6 +15,7 @@ var availableCaptures = [];
 var oppoName = "derek"; //temp
 var myName = "me";
 var session_global = 0;
+const MAGIC = 400;
 
 firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
@@ -612,22 +613,45 @@ function startJoin(sessionname){
 }
 
 function stop(){
+    var oppoId;
+    var oppoScore;
+    var myScore;
+    database.ref("battle/"+sessionId+"/user/0").on("value", function(snapshot) {
+        var oppoName = snapshot.val();
+        database.ref('/leaderboard/').orderByChild("score").on("value", function(snapshot) {
+            if(snapshot.val().email == oppoName){
+                oppoScore = snapshot.val().score * -1;
+            }
+            if(snapshot.val().email == myName){
+                myScore = snapshot.val().score * -1;
+            }
+        });    
+    });
     if (capture_ai > capture_you){
-        alert('GAME STOP!\n'+oppoName+' Won!\nPlease start a new game!');
+        var myChanceToWin = 1 / ( 1 + Math.pow(10, (oppoScore - myScore) / 400));
+        var ratingDelta = Math.round(32 * (0 - myChanceToWin));
+        var newRating = myRating + ratingDelta;
+
         // save lose result to database
         database.ref("leaderboard/"+firebase.auth().currentUser.uid+"/losses").once("value", function(snapshot) {
             var current_losses = snapshot.val();
             console.log(current_losses);
             database.ref("leaderboard/"+firebase.auth().currentUser.uid+"/losses").set(current_losses + 1);
+            database.ref("leaderboard/"+firebase.auth().currentUser.uid+"/score").set(newRating * -1);
             database.ref("battle/"+session_global+"/status").set("terminated"); // stop this round
         });
     } else if (capture_ai < capture_you){
+        var myChanceToWin = 1 / ( 1 + Math.pow(10, (oppoScore - myScore) / 400));
+        var ratingDelta = Math.round(32 * (1 - myChanceToWin));
+        var newRating = myRating + ratingDelta;
+
         alert('GAME STOP!\nYou Won! Congratulations!\nPlease start a new game!');
         // save win result to database
         database.ref("leaderboard/"+firebase.auth().currentUser.uid+"/wins").once("value", function(snapshot) {
             var current_wins = snapshot.val();
             console.log(current_wins);
             database.ref("leaderboard/"+firebase.auth().currentUser.uid+"/wins").set(current_wins + 1);
+            database.ref("leaderboard/"+firebase.auth().currentUser.uid+"/score").set(newRating * -1);
             database.ref("battle/"+session_global+"/status").set("terminated"); // stop this round
         });
     } else {

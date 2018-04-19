@@ -1,7 +1,7 @@
 
 function LeaderBoard() {
     var user = firebase.auth().currentUser;
-    var userId
+    var userId;
     var user_login = true;
     if(!user){
         user_login = false;
