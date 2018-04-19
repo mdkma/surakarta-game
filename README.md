@@ -1,7 +1,5 @@
 # Surakarta Game
 
-Mingyu MA/Derek :: [derek.ma](http://derek.ma) :: derek.ma@connect.polyu.hk
-
 **Play the game at the following link!**
 https://sarakarta-battle.firebaseapp.com
 

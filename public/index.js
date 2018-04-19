@@ -168,7 +168,7 @@ function search(my_x, my_y, prev_x, prev_y, start_x, start_y, circle) {
 
 function drag(ev) {
     // console.log('move from: ', ev.path[1].id);
-    console.log(ev);
+    //console.log(ev);
     // dragSrc = ev.path[0].id;
     // var id = ev.path[1].id;
     dragSrc = ev.target.id;
@@ -179,7 +179,18 @@ function drag(ev) {
     detectAvailable(x, y, id, dragSrc);
 }
 
+function dragTouch(ev){
+    console.log(ev);
+    dragSrc = ev.target.id;
+    var id = ev.target.parentElement.id;
+    var x = parseInt(id[3]);
+    var y = parseInt(id[1]);
+    // ev.dataTransfer.setData("text", ev.target.id);
+    detectAvailable(x, y, id, dragSrc);
+}
+
 function allowDrop(ev) {
+    console.log("allow");
     ev.preventDefault();
 }
 
@@ -191,8 +202,81 @@ function jump(my_x, my_y){
     }
 }
 
+function dropTouch(ev){
+    var changedTouch = ev.changedTouches[0];
+    var targetele = document.elementFromPoint(changedTouch.clientX, changedTouch.clientY);
+    // console.log(targetele);
+    // console.log(ev);
+    ev.preventDefault();
+    finishFlag = false;
+    manualFlag = false;
+    if (targetele.id[0] != 'p' && targetele.id[0] != 'b'){
+        // remove reminder border
+        var t = document.getElementById("table"),
+            tableRows = t.getElementsByTagName("tr"),
+            r = [], i, len, tds, j, jlen;
+    
+        for ( i =0, len = tableRows.length; i<len; i++) {
+            tds = tableRows[i].getElementsByTagName('td');
+            for( j = 0, jlen = tds.length; j < jlen; j++) {
+                tds[j].style.border = '1px solid transparent';
+            }
+        }
+    } else {
+        // check whether don't move
+        if (dragSrc === targetele.id){
+            alert('YOU ARE BACK!\nYou move this piece back to its original position. Please choose another move.');
+        } else if (targetele.id[0] === 'p'){ // move manually on a piece
+            var parentEle = document.getElementById(targetele.id).parentElement;
+            if (availableCaptures.indexOf(parentEle.id) != -1){
+                // real capture
+                alert('CAPTURE!');
+                document.getElementById(parentEle.id).innerHTML = "";
+                capture();
+                // move to that location
+                parentEle.appendChild(document.getElementById(dragSrc));
+                finishFlag = true;
+                manualFlag = true;
+            } else{
+                alert('WOOP! YOU CAN\'T CAPTURE IT!\nOther piece there and can\'t capture that piece. Please choose another move.');
+            }
+        } else{
+            // move to that location
+            // all touch drop are manually
+            // if (ev.dataTransfer){ // manually
+                // console.log('****manually');
+    
+            // var data = ev.dataTransfer.getData("text");
+            var data = ev.path[0].id;
+            targetele.appendChild(document.getElementById(data));
+            finishFlag = true;
+            manualFlag = true;
+        }
+        // remove reminder border
+        var t = document.getElementById("table"),
+            tableRows = t.getElementsByTagName("tr"),
+            r = [], i, len, tds, j, jlen;
+    
+        for ( i =0, len = tableRows.length; i<len; i++) {
+            tds = tableRows[i].getElementsByTagName('td');
+            for( j = 0, jlen = tds.length; j < jlen; j++) {
+                tds[j].style.border = '1px solid transparent';
+            }
+        }
+        if (finishFlag){
+            if (manualFlag){
+                console.log(session_global);
+                updateProgressCloud(session_global);
+            }
+            nextRound();
+        }
+    }
+}
+    
+
 function drop(ev) {
     // console.log('move to: ', ev.target.id);
+    console.log('drop', ev);
     ev.preventDefault();
     finishFlag = false;
     manualFlag = false;
@@ -207,6 +291,7 @@ function drop(ev) {
             capture();
             // move to that location
             var data = ev.dataTransfer.getData("text");
+            console.log("data", data);
             ev.path[1].appendChild(document.getElementById(data));
             finishFlag = true;
             manualFlag = true;
@@ -218,6 +303,7 @@ function drop(ev) {
         if (ev.dataTransfer){ // manually
             console.log('****manually');
             var data = ev.dataTransfer.getData("text");
+            console.log("data", data);
             ev.target.appendChild(document.getElementById(data));
             finishFlag = true;
             manualFlag = true;
@@ -432,21 +518,21 @@ function initPieces(sessionId){
     for (i = 0; i < 2; i++) { 
         html += '<tr>';
         for (j = 0; j < 6; j++){
-            html += "<td id='b"+i+"-"+j+"' ondrop='drop(event)' ondragover='allowDrop(event)'><div id='p"+i+"-"+j+"' class='piece piece1' draggable='true' ondragstart='drag(event)'></div></td>"
+            html += "<td id='b"+i+"-"+j+"' ontouchend='dropTouch(event)' ondrop='drop(event)' ondragover='allowDrop(event)'><div id='p"+i+"-"+j+"' class='piece piece1' draggable='true' ontouchstart='dragTouch(event)' ondragstart='drag(event)'></div></td>"
         }
         html += '</tr>';
     }
     for (i = 2; i < 4; i++) { 
         html += '<tr>';
         for (j = 0; j < 6; j++){
-            html += "<td id='b"+i+"-"+j+"' ondrop='drop(event)' ondragover='allowDrop(event)'></td>"
+            html += "<td id='b"+i+"-"+j+"' ontouchend='dropTouch(event)' ondrop='drop(event)' ondragover='allowDrop(event)'></td>"
         }
         html += '</tr>';
     }
     for (i = 4; i < 6; i++) { 
         html += '<tr>';
         for (j = 0; j < 6; j++){
-            html += "<td id='b"+i+"-"+j+"' ondrop='drop(event)' ondragover='allowDrop(event)'><div id='p"+i+"-"+j+"' class='piece piece2' draggable='true' ondragstart='drag(event)'></div></td>"
+            html += "<td id='b"+i+"-"+j+"' ontouchend='dropTouch(event)' ondrop='drop(event)' ondragover='allowDrop(event)'><div id='p"+i+"-"+j+"' class='piece piece2' draggable='true' ontouchstart='dragTouch(event)' ondragstart='drag(event)'></div></td>"
         }
         html += '</tr>';
     }
@@ -457,22 +543,21 @@ function initPieces(sessionId){
 }
 
 function startCreate(){
-    // session = 11;
-    if (firebase.auth().currentUser == null){
-        alert("Sign in first please!");
-    } else{
+    //if (firebase.auth().currentUser == null){
+    //    alert("Sign in first please!");
+    //} else{
         var sessionId = Date.now();
         session_global = sessionId;
         document.getElementById("session-id-notice").innerHTML = "Session ID: "+sessionId;
         turn = 0;
         side = 1;
-        
+        initPieces(sessionId);
         database.ref('battle/'+sessionId).set({
             user: {0: myName},
             turn: 0,
             status: "waiting",
         });
-        initPieces(sessionId);
+        // initPieces(sessionId);
         document.getElementById("notice1").innerHTML = "Waiting for someone join this session...";
         database.ref("battle/"+sessionId+"/status").on("value", function(snapshot) {
             if (snapshot.val() == "active"){
@@ -486,14 +571,14 @@ function startCreate(){
         database.ref("battle/"+sessionId+"/board").on("value", function(snapshot) {
             updateProgressLocal(snapshot.val());
         });
-    }
+    //}
 }
 
 function startJoin(sessionname){
     console.log(sessionname);
-    if (firebase.auth().currentUser == null){
-        alert("Sign in first please!");
-    } else{
+    //if (firebase.auth().currentUser == null){
+    //    alert("Sign in first please!");
+    //} else{
         document.getElementById("session-id-notice").innerHTML = "Session ID: "+sessionname;
         sessionId = parseInt(sessionname); // session should be chosen
         session_global = sessionId;
@@ -502,8 +587,10 @@ function startJoin(sessionname){
         // save gender and age to the cloud
         input_gender = document.getElementById("genderInput").value;
         input_age = document.getElementById("ageInput").value;
-        database.ref('leaderboard/'+firebase.auth().currentUser.uid+'/gender').set(input_gender);
-        database.ref('leaderboard/'+firebase.auth().currentUser.uid+'/age').set(input_age);
+        if (firebase.auth().currentUser){
+            database.ref('leaderboard/'+firebase.auth().currentUser.uid+'/gender').set(input_gender);
+            database.ref('leaderboard/'+firebase.auth().currentUser.uid+'/age').set(input_age);
+        }
         initPieces(sessionId);
         database.ref('battle/'+sessionId+'/user/1').set(myName);
         database.ref('battle/'+sessionId+'/status').set("active");
@@ -521,7 +608,7 @@ function startJoin(sessionname){
         database.ref("battle/"+sessionId+"/board").on("value", function(snapshot) {
             updateProgressLocal(snapshot.val());
         });
-    }
+    //}
 }
 
 function stop(){

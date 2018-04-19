@@ -2,8 +2,9 @@
 <html>
   <head>
     <title>Locations of All Players</title>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
@@ -33,16 +34,18 @@
         });
 
         function placeMarker( detail ) {
-            var latLng = new google.maps.LatLng( detail.loc.lat, detail.loc.lng);
-            var marker = new google.maps.Marker({
-                position : latLng,
-                map      : map
-            });
-            google.maps.event.addListener(marker, 'click', function(){
-                infowindow.close(); // Close previously opened infowindow
-                infowindow.setContent(detail.email+"\n Win: "+detail.wins+"\n Lose: "+detail.losses);
-                infowindow.open(map, marker);
-            });
+            if (detail.loc){
+                var latLng = new google.maps.LatLng( detail.loc.lat, detail.loc.lng);
+                var marker = new google.maps.Marker({
+                    position : latLng,
+                    map      : map
+                });
+                google.maps.event.addListener(marker, 'click', function(){
+                    infowindow.close(); // Close previously opened infowindow
+                    infowindow.setContent(detail.email+"\n Win: "+detail.wins+"\n Lose: "+detail.losses);
+                    infowindow.open(map, marker);
+                });
+            }
         }
 
         database.ref("leaderboard").on("value", function(snapshot) {
