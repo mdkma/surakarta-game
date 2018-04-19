@@ -33,16 +33,18 @@
         });
 
         function placeMarker( detail ) {
-            var latLng = new google.maps.LatLng( detail.loc.lat, detail.loc.lng);
-            var marker = new google.maps.Marker({
-                position : latLng,
-                map      : map
-            });
-            google.maps.event.addListener(marker, 'click', function(){
-                infowindow.close(); // Close previously opened infowindow
-                infowindow.setContent(detail.email+"\n Win: "+detail.wins+"\n Lose: "+detail.losses);
-                infowindow.open(map, marker);
-            });
+            if (detail.loc){
+                var latLng = new google.maps.LatLng( detail.loc.lat, detail.loc.lng);
+                var marker = new google.maps.Marker({
+                    position : latLng,
+                    map      : map
+                });
+                google.maps.event.addListener(marker, 'click', function(){
+                    infowindow.close(); // Close previously opened infowindow
+                    infowindow.setContent(detail.email+"\n Win: "+detail.wins+"\n Lose: "+detail.losses);
+                    infowindow.open(map, marker);
+                });
+            }
         }
 
         database.ref("leaderboard").on("value", function(snapshot) {
