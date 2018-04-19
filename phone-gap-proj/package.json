@@ -1,0 +1,14 @@
+{
+  "name": "com.phonegap.helloworld",
+  "version": "1.0.0",
+  "displayName": "Surakarta Game",
+  "cordova": {
+    "platforms": [
+      "android"
+    ]
+  },
+  "dependencies": {
+    "cordova-android": "~7.0.0",
+    "cordova-plugin-whitelist": "^1.3.3"
+  }
+}

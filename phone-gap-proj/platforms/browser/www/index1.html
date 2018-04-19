@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.css" />
+		<style>
+			html {
+				height: 100%;
+			}
+
+			body {
+				margin: 0;
+				padding: 13px;
+				box-sizing: border-box;
+				height: 100%;
+				background-color: #5C6BC0;
+				color: white;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				text-align: center;
+			}
+
+			.title {
+				text-align: center;
+				font: italic 32px Georgia, serif;
+				color: rgb(253, 91, 153);
+			}
+
+			body > h1 {
+				padding: 10px 5px;
+				border: 1px solid rgb(72, 90, 192);
+				border-radius: 5px;
+				box-shadow: 0 0 0.6em rgb(72, 90, 192);
+				background-color: rgb(72, 90, 192);
+			}
+
+			.container {
+				padding: 15px 10px;
+			}
+
+			#loader {
+				text-align: center;
+			}
+		</style>
+	</head>
+
+
+	<body>
+		<!-- The surrounding HTML is left untouched by FirebaseUI.
+				 Your app may use that space for branding, controls and other customizations.-->
+		<div class="title">Surakarta Game</div>
+		
+		<h1>Please sign in to play online</h1>
+		<div class="container">
+			<div id="firebaseui-auth-container"></div>
+			<div id="loader">Loading...</div>
+		</div>
+
+
+		<script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-auth.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-database.js"></script>
+		<script src="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.js"></script>
+
+		<script src="scripts/firebaseInit.js"></script>
+		<script src="scripts/firebaseAuth.js"></script>
+
+	</body>
+</html>
