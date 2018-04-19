@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+	</head>
+
+
+	<body>
+	    <div class="container">
+            <div class="form-group mt-3 col-4">
+                <label for="name">Name</label>
+                <input class="form-control" id="nameInput" value="" disabled=true>
+            </div>
+
+            <div class="form-group mt-3 col-4">
+                <label for="eamil">Eamil</label>
+                <input class="form-control" id="emailInput" value="" disabled=true>
+            </div>
+
+	        <div class="row">
+	            <div class="form-group mt-3 col-4">
+	                <label for="genderInput">Gender</label>
+	                <select class="form-control" id="genderInput">
+	                	<option selected="selected">-- Please Select --</option>
+	                    <option>Male</option>
+	                    <option>Female</option>
+	                    <option>Unclassified</option>
+	                </select>
+	            </div>
+
+	            <div class="form-group mt-3 col-4">
+	                <label for="ageInput">Age</label>
+	                <input type="number" class="form-control" id="ageInput" value="">
+	            </div>
+	        </div>
+
+            <div class="form-group mt-3 col-4">
+                <label for="scoreInput">Score</label>
+                <input class="form-control" id="scoreInput" value="" disabled=true>
+            </div>
+
+            <div class="form-group mt-3 col-4">
+                <label for="winsInput">Wins</label>
+                <input class="form-control" id="winsInput" value="" disabled=true>
+            </div>
+
+            <div class="form-group mt-3 col-4">
+                <label for="lossesInput">Losses</label>
+                <input class="form-control" id="lossesInput" value="" disabled=true>
+            </div>
+
+  			<input type="submit" value="Update" onclick="updateProfile()">
+  			<p id="updateStatus"></p>
+	    </div>
+
+
+		<script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-auth.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-database.js"></script>
+		<script src="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.js"></script>
+
+		<script src="scripts/firebaseInit.js"></script>
+
+		<script src="scripts/profile.js"></script>
+
+	</body>
+</html>

@@ -1,0 +1,305 @@
+html {
+    font-size: 10pt;
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+#startPage {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #5C6BC0;
+    z-index: 100;
+    top: 0px;
+}
+
+#welcome {
+    color: white;
+    width: 100%;
+    margin: 20px auto;
+    text-align: center;
+    font-size: 20pt;
+}
+
+#login-name-display {
+    color: white;
+    margin: 10px 15px;
+}
+
+.info-container {
+    margin: 10px;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+}
+
+.info-container .form-group {
+    width: 45%;
+    margin: auto;
+}
+
+.option {
+    padding: 3px;
+}
+
+.option .optionsnotice {
+    margin: 10px;
+    font-size: 14pt;
+    color: rgb(252, 141, 252);
+}
+
+.option #startbtn {
+   width: 100px;
+   margin: 5px auto;
+}
+
+.smallnotice {
+    color: white;
+    margin: 5px 10px;
+}
+
+
+#allAvailableSessionDiv {
+    max-height: 200px;
+    overflow: auto;
+    flex-wrap: wrap;
+}
+
+.choice-container {
+    position: absolute;
+    margin: auto 10px;
+    bottom: 10px;
+    display: flex;
+
+}
+
+.choice-container button {
+    font-size: 10pt;
+    width: auto;
+    padding: 5px;
+    margin: 3px !important;
+}
+
+.game {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.game .title {
+    text-align: center;
+    font: italic 32px Georgia, serif;
+    color: rgb(253, 91, 153);
+}
+
+.game .game-container {
+    margin: 15px 0;
+    margin-top: 55px;
+    
+}
+
+#noticeBoard {
+    position: absolute;
+    bottom: 5px;
+    max-height: 250px;
+    margin: 0 15px;
+}
+
+#noticeBoard h2 {
+    text-align: center;
+    font-size: 18pt;
+    margin-bottom: 10px;
+}
+
+#noticeBoard p {
+    margin: 3px;
+}
+
+#noticeBoard div {
+    text-align: center;
+}
+
+#noticeBoard button {
+    margin: 0 10px;
+}
+
+
+
+#nameimg {
+    margin-left: 100px;
+}
+
+#turn {
+    margin-left: 0px;
+}
+
+.btn-type1 {
+    width: 250px;
+}
+#startbtn-join {
+    width: 400px;
+    margin-left: 150px;
+}
+
+td {
+    width: 100px;
+    height: 100px;
+    border: 1px solid transparent;
+}
+
+table {
+    width: 600px;
+    border-collapse: separate;
+    margin-left: 200px;
+    margin-top: 140px;
+    z-index: -1;
+}
+
+#turn {
+    font-size: 50px;
+    color: black;
+}
+
+#board {
+    position: absolute;
+    z-index: -1;
+    top: 200px;
+    left: 250px;
+    /* left: 50%;
+    margin-left: -250px; */
+}
+
+.piece {
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    border-radius: 50%;
+    margin-top: -35px;
+    margin-left: 10px;
+}
+
+.piece:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.piece1{
+    background: black;
+}
+
+.piece2{
+    background: red;
+}
+
+.circle {
+    position: absolute;
+    z-index: -1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.circle-s {
+    width: 200px;
+    height: 200px;
+}
+
+.circle-l {
+    width: 400px;
+    height: 400px;
+}
+
+#c1-1 {
+    top: -96px;
+    left: -96px;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-left-radius:50%;
+    border: 8px solid #00aaff;
+}
+
+#c1-2 {
+    top: -196px;
+    left: -196px;
+
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-left-radius:50%;
+    border: 8px solid green;
+}
+
+#c2-1 {
+    top: -96px;
+    left: 396px;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius:50%;
+    border: 8px solid #00aaff;
+}
+
+#c2-2 {
+    top: -196px;
+    left: 296px;
+
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius:50%;
+    border: 8px solid green;
+}
+
+#c3-1 {
+    top: 396px;
+    left: -96px;
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius:50%;
+    border: 8px solid #00aaff;
+}
+
+#c3-2 {
+    top: 296px;
+    left: -196px;
+
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius:50%;
+    border: 8px solid green;
+}
+
+#c4-1 {
+    top: 396px;
+    left: 396px;
+    border-top-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius:50%;
+    border: 8px solid #00aaff;
+}
+
+#c4-2 {
+    top: 296px;
+    left: 296px;
+    border-top-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius:50%;
+    border: 8px solid green;
+}
+
+.l1 {
+    margin-top: 196px;
+}
+
+.c1 {
+    margin-left: 205px;
+}
+
+.game-container {
+    position: absolute;
+    height: 1024px;
+    width: 1024px;
+}
