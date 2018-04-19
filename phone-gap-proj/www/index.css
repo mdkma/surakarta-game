@@ -29,16 +29,16 @@ body {
     margin: 10px 15px;
 }
 
-.info-container {
+.profile {
     margin: 10px;
     padding: 5px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
 }
 
-.info-container .form-group {
-    width: 45%;
-    margin: auto;
+.profile button {
+    margin: 5px 30px !important;
 }
 
 .option {
