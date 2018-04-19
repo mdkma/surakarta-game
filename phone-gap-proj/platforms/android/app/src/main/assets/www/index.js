@@ -181,13 +181,15 @@ function drag(ev) {
 }
 
 function dragTouch(ev){
-    console.log(ev);
     dragSrc = ev.target.id;
-    var id = ev.target.parentElement.id;
-    var x = parseInt(id[3]);
-    var y = parseInt(id[1]);
-    // ev.dataTransfer.setData("text", ev.target.id);
-    detectAvailable(x, y, id, dragSrc);
+    if (document.getElementById(ev.target.id).getAttribute('draggable') === 'true'){
+        console.log('1');
+        var id = ev.target.parentElement.id;
+        var x = parseInt(id[3]);
+        var y = parseInt(id[1]);
+        // ev.dataTransfer.setData("text", ev.target.id);
+        detectAvailable(x, y, id, dragSrc);
+    }
 }
 
 function allowDrop(ev) {
@@ -206,70 +208,72 @@ function jump(my_x, my_y){
 function dropTouch(ev){
     var changedTouch = ev.changedTouches[0];
     var targetele = document.elementFromPoint(changedTouch.clientX, changedTouch.clientY);
-    // console.log(targetele);
-    // console.log(ev);
-    ev.preventDefault();
-    finishFlag = false;
-    manualFlag = false;
-    if (targetele.id[0] != 'p' && targetele.id[0] != 'b'){
-        // remove reminder border
-        var t = document.getElementById("table"),
-            tableRows = t.getElementsByTagName("tr"),
-            r = [], i, len, tds, j, jlen;
-    
-        for ( i =0, len = tableRows.length; i<len; i++) {
-            tds = tableRows[i].getElementsByTagName('td');
-            for( j = 0, jlen = tds.length; j < jlen; j++) {
-                tds[j].style.border = '1px solid transparent';
+    if (document.getElementById(dragSrc).getAttribute('draggable') === 'true'){
+        // console.log(targetele);
+        // console.log(ev);
+        ev.preventDefault();
+        finishFlag = false;
+        manualFlag = false;
+        if (targetele.id[0] != 'p' && targetele.id[0] != 'b'){
+            // remove reminder border
+            var t = document.getElementById("table"),
+                tableRows = t.getElementsByTagName("tr"),
+                r = [], i, len, tds, j, jlen;
+        
+            for ( i =0, len = tableRows.length; i<len; i++) {
+                tds = tableRows[i].getElementsByTagName('td');
+                for( j = 0, jlen = tds.length; j < jlen; j++) {
+                    tds[j].style.border = '1px solid transparent';
+                }
             }
-        }
-    } else {
-        // check whether don't move
-        if (dragSrc === targetele.id){
-            alert('YOU ARE BACK!\nYou move this piece back to its original position. Please choose another move.');
-        } else if (targetele.id[0] === 'p'){ // move manually on a piece
-            var parentEle = document.getElementById(targetele.id).parentElement;
-            if (availableCaptures.indexOf(parentEle.id) != -1){
-                // real capture
-                alert('CAPTURE!');
-                document.getElementById(parentEle.id).innerHTML = "";
-                capture();
+        } else {
+            // check whether don't move
+            if (dragSrc === targetele.id){
+                alert('YOU ARE BACK!\nYou move this piece back to its original position. Please choose another move.');
+            } else if (targetele.id[0] === 'p'){ // move manually on a piece
+                var parentEle = document.getElementById(targetele.id).parentElement;
+                if (availableCaptures.indexOf(parentEle.id) != -1){
+                    // real capture
+                    alert('CAPTURE!');
+                    document.getElementById(parentEle.id).innerHTML = "";
+                    capture();
+                    // move to that location
+                    parentEle.appendChild(document.getElementById(dragSrc));
+                    finishFlag = true;
+                    manualFlag = true;
+                } else{
+                    alert('WOOP! YOU CAN\'T CAPTURE IT!\nOther piece there and can\'t capture that piece. Please choose another move.');
+                }
+            } else{
                 // move to that location
-                parentEle.appendChild(document.getElementById(dragSrc));
+                // all touch drop are manually
+                // if (ev.dataTransfer){ // manually
+                    // console.log('****manually');
+        
+                // var data = ev.dataTransfer.getData("text");
+                var data = ev.path[0].id;
+                targetele.appendChild(document.getElementById(data));
                 finishFlag = true;
                 manualFlag = true;
-            } else{
-                alert('WOOP! YOU CAN\'T CAPTURE IT!\nOther piece there and can\'t capture that piece. Please choose another move.');
             }
-        } else{
-            // move to that location
-            // all touch drop are manually
-            // if (ev.dataTransfer){ // manually
-                // console.log('****manually');
-    
-            // var data = ev.dataTransfer.getData("text");
-            var data = ev.path[0].id;
-            targetele.appendChild(document.getElementById(data));
-            finishFlag = true;
-            manualFlag = true;
-        }
-        // remove reminder border
-        var t = document.getElementById("table"),
-            tableRows = t.getElementsByTagName("tr"),
-            r = [], i, len, tds, j, jlen;
-    
-        for ( i =0, len = tableRows.length; i<len; i++) {
-            tds = tableRows[i].getElementsByTagName('td');
-            for( j = 0, jlen = tds.length; j < jlen; j++) {
-                tds[j].style.border = '1px solid transparent';
+            // remove reminder border
+            var t = document.getElementById("table"),
+                tableRows = t.getElementsByTagName("tr"),
+                r = [], i, len, tds, j, jlen;
+        
+            for ( i =0, len = tableRows.length; i<len; i++) {
+                tds = tableRows[i].getElementsByTagName('td');
+                for( j = 0, jlen = tds.length; j < jlen; j++) {
+                    tds[j].style.border = '1px solid transparent';
+                }
             }
-        }
-        if (finishFlag){
-            if (manualFlag){
-                console.log(session_global);
-                updateProgressCloud(session_global);
+            if (finishFlag){
+                if (manualFlag){
+                    console.log(session_global);
+                    updateProgressCloud(session_global);
+                }
+                nextRound();
             }
-            nextRound();
         }
     }
 }
@@ -277,7 +281,7 @@ function dropTouch(ev){
 
 function drop(ev) {
     // console.log('move to: ', ev.target.id);
-    console.log('drop', ev);
+    // console.log('drop', ev);
     ev.preventDefault();
     finishFlag = false;
     manualFlag = false;
