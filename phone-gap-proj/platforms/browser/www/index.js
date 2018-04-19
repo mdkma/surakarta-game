@@ -616,7 +616,7 @@ function stop(){
     var oppoId;
     var oppoScore;
     var myScore;
-    database.ref("battle/"+sessionId+"/user/0").on("value", function(snapshot) {
+    database.ref("battle/"+session_global+"/user/0").on("value", function(snapshot) {
         if(myName != snapshot.val()){
             var oppoName = snapshot.val();
             database.ref('/leaderboard/').orderByChild("score").on("value", function(leaderboardSnapshot) {
@@ -629,7 +629,7 @@ function stop(){
             });
         }
     });
-    database.ref("battle/"+sessionId+"/user/1").on("value", function(snapshot) {
+    database.ref("battle/"+session_global+"/user/1").on("value", function(snapshot) {
         if(myName != snapshot.val()){
             var oppoName = snapshot.val();
             database.ref('/leaderboard/').orderByChild("score").on("value", function(leaderboardSnapshot) {
