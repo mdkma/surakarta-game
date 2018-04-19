@@ -18,7 +18,7 @@ function initLeaderboard(_uid, _name, _email) {
 	var postData = {
         name: _name,
         email: _email,
-	    score: 1200,
+	    score: -1200,
 	    wins: 0,
 	    losses: 0
 	};
