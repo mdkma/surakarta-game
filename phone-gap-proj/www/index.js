@@ -617,15 +617,30 @@ function stop(){
     var oppoScore;
     var myScore;
     database.ref("battle/"+sessionId+"/user/0").on("value", function(snapshot) {
-        var oppoName = snapshot.val();
-        database.ref('/leaderboard/').orderByChild("score").on("value", function(snapshot) {
-            if(snapshot.val().email == oppoName){
-                oppoScore = snapshot.val().score * -1;
-            }
-            if(snapshot.val().email == myName){
-                myScore = snapshot.val().score * -1;
-            }
-        });    
+        if(myName != snapshot.val()){
+            var oppoName = snapshot.val();
+            database.ref('/leaderboard/').orderByChild("score").on("value", function(leaderboardSnapshot) {
+                if(leaderboardSnapshot.val().email == oppoName){
+                    oppoScore = leaderboardSnapshot.val().score * -1;
+                }
+                if(leaderboardSnapshot.val().email == myName){
+                    myScore = leaderboardSnapshot.val().score * -1;
+                }
+            });
+        }
+    });
+    database.ref("battle/"+sessionId+"/user/1").on("value", function(snapshot) {
+        if(myName != snapshot.val()){
+            var oppoName = snapshot.val();
+            database.ref('/leaderboard/').orderByChild("score").on("value", function(leaderboardSnapshot) {
+                if(leaderboardSnapshot.val().email == oppoName){
+                    oppoScore = leaderboardSnapshot.val().score * -1;
+                }
+                if(leaderboardSnapshot.val().email == myName){
+                    myScore = leaderboardSnapshot.val().score * -1;
+                }
+            });
+        }
     });
     if (capture_ai > capture_you){
         var myChanceToWin = 1 / ( 1 + Math.pow(10, (oppoScore - myScore) / 400));
