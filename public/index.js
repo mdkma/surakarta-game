@@ -212,13 +212,26 @@ function jump(my_x, my_y){
 }
 
 function dropTouch(ev){
-        var changedTouch = ev.changedTouches[0];
-        var targetele = document.elementFromPoint(changedTouch.clientX, changedTouch.clientY);
-        // console.log(targetele);
-        // console.log(ev);
-        ev.preventDefault();
-        finishFlag = false;
-        manualFlag = false;
+    var changedTouch = ev.changedTouches[0];
+    var targetele = document.elementFromPoint(changedTouch.clientX, changedTouch.clientY);
+    // console.log(targetele);
+    // console.log(ev);
+    ev.preventDefault();
+    finishFlag = false;
+    manualFlag = false;
+    if (targetele.id[0] != 'p' && targetele.id[0] != 'b'){
+        // remove reminder border
+        var t = document.getElementById("table"),
+            tableRows = t.getElementsByTagName("tr"),
+            r = [], i, len, tds, j, jlen;
+    
+        for ( i =0, len = tableRows.length; i<len; i++) {
+            tds = tableRows[i].getElementsByTagName('td');
+            for( j = 0, jlen = tds.length; j < jlen; j++) {
+                tds[j].style.border = '1px solid transparent';
+            }
+        }
+    } else {
         // check whether don't move
         if (dragSrc === targetele.id){
             alert('YOU ARE BACK!\nYou move this piece back to its original position. Please choose another move.');
@@ -267,10 +280,12 @@ function dropTouch(ev){
             nextRound();
         }
     }
+}
     
 
 function drop(ev) {
     // console.log('move to: ', ev.target.id);
+    console.log('drop', ev);
     ev.preventDefault();
     finishFlag = false;
     manualFlag = false;
@@ -537,7 +552,6 @@ function initPieces(sessionId){
 }
 
 function startCreate(){
-    // session = 11;
     //if (firebase.auth().currentUser == null){
     //    alert("Sign in first please!");
     //} else{
@@ -554,16 +568,12 @@ function startCreate(){
             database.ref('leaderboard/'+firebase.auth().currentUser.uid+'/gender').set(input_gender);
             database.ref('leaderboard/'+firebase.auth().currentUser.uid+'/age').set(input_age);   
         }
-        // myName = document.getElementById('nameInput').value;
-        // if (myName == ""){
-        //     myName = "you(creator)";
-        // }
         database.ref('battle/'+sessionId).set({
             user: {0: myName},
             turn: 0,
             status: "waiting",
         });
-        initPieces(sessionId);
+        // initPieces(sessionId);
         document.getElementById("notice1").innerHTML = "Waiting for someone join this session...";
         database.ref("battle/"+sessionId+"/status").on("value", function(snapshot) {
             if (snapshot.val() == "active"){
