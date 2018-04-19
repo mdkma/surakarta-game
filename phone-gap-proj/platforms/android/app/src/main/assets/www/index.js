@@ -615,7 +615,7 @@ function startJoin(sessionname){
 function stop(){
     var oppoId;
     var oppoScore;
-    var myScore;
+    var myScore = 0;
     database.ref("battle/"+session_global+"/user/0").on("value", function(snapshot) {
         if(myName != snapshot.val()){
             var oppoName = snapshot.val();
@@ -645,7 +645,7 @@ function stop(){
     if (capture_ai > capture_you){
         var myChanceToWin = 1 / ( 1 + Math.pow(10, (oppoScore - myScore) / 400));
         var ratingDelta = Math.round(32 * (0 - myChanceToWin));
-        var newRating = myRating + ratingDelta;
+        var newRating = myScore + ratingDelta;
 
         // save lose result to database
         database.ref("leaderboard/"+firebase.auth().currentUser.uid+"/losses").once("value", function(snapshot) {
@@ -658,7 +658,7 @@ function stop(){
     } else if (capture_ai < capture_you){
         var myChanceToWin = 1 / ( 1 + Math.pow(10, (oppoScore - myScore) / 400));
         var ratingDelta = Math.round(32 * (1 - myChanceToWin));
-        var newRating = myRating + ratingDelta;
+        var newRating = myScore + ratingDelta;
 
         alert('GAME STOP!\nYou Won! Congratulations!\nPlease start a new game!');
         // save win result to database
