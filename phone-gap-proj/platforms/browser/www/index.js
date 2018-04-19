@@ -658,6 +658,7 @@ function stop(){
             database.ref("leaderboard/"+firebase.auth().currentUser.uid+"/losses").set(current_losses + 1);
             database.ref("leaderboard/"+firebase.auth().currentUser.uid+"/score").set(newRating * -1);
             database.ref("battle/"+session_global+"/status").set("terminated"); // stop this round
+            restart();
         });
     } else if (capture_ai < capture_you){
         var myChanceToWin = 1 / ( 1 + Math.pow(10, (oppoScore - myScore) / 400));
@@ -672,11 +673,13 @@ function stop(){
             database.ref("leaderboard/"+firebase.auth().currentUser.uid+"/wins").set(current_wins + 1);
             database.ref("leaderboard/"+firebase.auth().currentUser.uid+"/score").set(newRating * -1);
             database.ref("battle/"+session_global+"/status").set("terminated"); // stop this round
+            restart();
         });
     } else {
         alert('GAME STOP!\nYou and '+oppoName+' leave same amount of pieces on the board, nobody wins.\nPlease start a new game!');
+        restart();
     }
-    database.ref('battle/'+session+'/status').set("inactive");
+    database.ref('battle/'+session_global+'/status').set("terminated");
 }
 
 function restart(){
