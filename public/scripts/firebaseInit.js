@@ -34,7 +34,6 @@ firebase.auth().onAuthStateChanged(function(_user) {
 	if (user != null) {
 		name = user.displayName;
 		email = user.email;
-		photoURL = user.photoURL;
 		uid = user.uid; // The user's ID, unique to the Firebase project. Do NOT use
 		               	// this value to authenticate with your backend server, if
 		               	// you have one. Use User.getToken() instead.

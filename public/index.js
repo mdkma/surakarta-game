@@ -37,15 +37,6 @@ firebase.auth().onAuthStateChanged(function(user) {
         // Browser doesn't support Geolocation
             alert("Please open localization function for the browser.");
         }
-        database.ref("leaderboard/"+user.uid).once("value", function(snapshot) {
-            userInfo = snapshot.val();
-            if (userInfo.gender != null ){
-                document.getElementById("genderInput").value = userInfo.gender;
-            }
-            if (userInfo.age != null){
-                document.getElementById("ageInput").value = userInfo.age;
-            }
-        });
     } else {
       // No user is signed in.
       document.getElementById("login-name-display").innerHTML = "You are not logged in yet.";
@@ -475,15 +466,7 @@ function startCreate(){
         document.getElementById("session-id-notice").innerHTML = "Session ID: "+sessionId;
         turn = 0;
         side = 1;
-        // save gender and age to the cloud
-        input_gender = document.getElementById("genderInput").value;
-        input_age = document.getElementById("ageInput").value;
-        database.ref('leaderboard/'+firebase.auth().currentUser.uid+'/gender').set(input_gender);
-        database.ref('leaderboard/'+firebase.auth().currentUser.uid+'/age').set(input_age);
-        // myName = document.getElementById('nameInput').value;
-        // if (myName == ""){
-        //     myName = "you(creator)";
-        // }
+        
         database.ref('battle/'+sessionId).set({
             user: {0: myName},
             turn: 0,
