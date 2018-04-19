@@ -1,16 +1,21 @@
 
 function LeaderBoard() {
-    var userId = firebase.auth().currentUser.uid;
+    var user = firebase.auth().currentUser;
+    var userId
     var user_login = true;
-    if(!userId){
+    if(!user){
         user_login = false;
+        userId = -1;
+    }
+    else{
+        userId = user.uid;
     }
     var userScore;
     var leaderboardRef = firebase.database().ref('/leaderboard/');
     var userInTop10 = -1;
 
     var body = document.getElementsByTagName('body')[0];
-    var tbl = document.createElement('table');
+    var tbl = document.getElementById('leaderboard');
     tbl.style.width = '100%';
     tbl.setAttribute('border', '1');
     var tbdy = document.createElement('tbody');
