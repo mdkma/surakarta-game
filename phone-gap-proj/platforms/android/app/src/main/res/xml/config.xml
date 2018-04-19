@@ -9,7 +9,11 @@
     </author>
     <content src="index.html" />
     <icon src="icon.png" />
+    <gap:plugin name="cordova-plugin-geolocation" source="npm" />
+    <gap:plugin name="cordova-plugin-whitelist" source="npm" version="1.1.0" />
     <access origin="*" />
+    <allow-navigation href="http://*/*" />
+    <allow-intent href="https://*/*" />
     <allow-navigation href="*" />
     <preference name="loglevel" value="DEBUG" />
 </widget>

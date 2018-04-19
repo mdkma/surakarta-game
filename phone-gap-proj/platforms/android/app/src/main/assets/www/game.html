@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src *; script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src  'self' 'unsafe-inline' *"> -->
+    <meta http-equiv="Content-Security-Policy" content="script-src: 'self' 'unsafe-inline' 'unsafe-eval' 'https://maxcdn.bootstrapcdn.com'">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Surakarta Game</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.css" />
+</head>
+<body>
+<div id="startPage">
+    <h1 class="display-5 mb-3" id='welcome'>Welcome to play Surakarta Game!</h1>
+
+    <div class="profile">
+        <p id="login-name-display" class="mt-3"></p>
+        <a href="profile.html" target="_blank"><button id="profile-board-btn" type="button" class="btn-type1 btn btn-outline-light btn-lg btn-block">View Profile</button></a>
+    </div>
+
+    <div class="option">
+        <h2 class="display-5 mb-3 mt-3 optionsnotice">Option 1: CREATE a Session</h2>
+        <button id="startbtn" type="button" class="btn btn-primary btn-block mt-3" onclick="startCreate()">CREATE</button>
+        <h2 class="display-5 mb-3 mt-3 optionsnotice">Option 2: Choose a Session to JOIN</h2>
+        <div  class="smallnotice">
+            <p>All available sessions:</p>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons" id="allAvailableSessionDiv">
+                <label class="btn btn-secondary">
+                    <input type="radio" name="options" id="option1" autocomplete="off"> Loading...
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="choice-container">
+        <a href="leaderboard.html" target="_blank"><button id="learder-board-btn" type="button" class="btn-type1 btn btn-outline-light btn-lg btn-block mt-3 col mr-3">Leader Board</button></a>
+        <a href="map.html" target="_blank"><button id="map-btn" type="button" class="btn-type1 btn btn-outline-light btn-lg btn-block mt-3 col mr-3 ml-3">Locations of Players</button></a>
+        <a href="README.html" target="_blank"><button id="readme-btn" type="button" class="btn-type1 btn btn-outline-light btn-lg btn-block mt-3 col ml-3">Learn Rules</button></a>
+        </div>
+    <!-- <button id="startbtn-join" type="button" class="btn btn-primary btn-lg btn-block mt-3" onclick="startJoin()">JOIN</button> -->
+</div>
+
+<div class="game">
+    <div class="title">Surakarta Game</div>
+    <div class="game-container">
+        <table id='table'></table>
+        <div id="board">
+            <svg height="500" width="500">
+                <line x1="0" y1="0" x2="500" y2="0" style="stroke:rgb(255, 191, 0);stroke-width:12" />
+                <line x1="0" y1="0" x2="0" y2="500" style="stroke:rgb(255, 191, 0);stroke-width:12" />
+                <line x1="500" y1="0" x2="500" y2="500" style="stroke:rgb(255, 191, 0);stroke-width:12" />
+                <line x1="0" y1="500" x2="500" y2="500" style="stroke:rgb(255, 191, 0);stroke-width:12" />
+                <line x1="100" y1="0" x2="100" y2="500" style="stroke:rgb(0, 170, 255);stroke-width:8" />
+                <line x1="400" y1="0" x2="400" y2="500" style="stroke:rgb(0, 170, 255);stroke-width:8" />
+                <line x1="200" y1="0" x2="200" y2="500" style="stroke:green;stroke-width:8" />
+                <line x1="300" y1="0" x2="300" y2="500" style="stroke:green;stroke-width:8" />
+                <line x1="0" y1="100" x2="500" y2="100" style="stroke:rgb(0, 170, 255);stroke-width:8" />
+                <line x1="0" y1="400" x2="500" y2="400" style="stroke:rgb(0, 170, 255);stroke-width:8" />
+                <line x1="0" y1="200" x2="500" y2="200" style="stroke:green;stroke-width:8" />
+                <line x1="0" y1="300" x2="500" y2="300" style="stroke:green;stroke-width:8" />
+            </svg>
+            <div id="c1-1" class="circle circle-s"></div>
+            <div id="c1-2" class="circle circle-l"></div>
+            <div id="c2-1" class="circle circle-s"></div>
+            <div id="c2-2" class="circle circle-l"></div>
+            <div id="c3-1" class="circle circle-s"></div>
+            <div id="c3-2" class="circle circle-l"></div>
+            <div id="c4-1" class="circle circle-s"></div>
+            <div id="c4-2" class="circle circle-l"></div>
+        </div>
+    </div>
+    <div id='noticeBoard'>
+        <h2 id='turn' class='display-2'>It's Mr. AI's Turn</h2>
+        <h5 id="notice1">You are red, Mr. AI is black.</h5>
+        <h5 id="session-id-notice"></h5>
+        </br>
+        <p>Number of your pieces been captured: <div id='capture-ai'>0</div> </p>
+        <p>Number of opposite side's pieces been captured: <div id='capture-you'>0</div></p>
+        <div class="buttons">
+            <button type="button" class="btn btn-danger" onclick="stop()">STOP</button>
+            <button type="button" class="btn btn-primary" onclick="restart()">RESTART</button>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+<script src="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.js"></script>
+<script src="scripts/firebaseInit.js"></script>
+<script src="index.js"></script>
+<script>
+    function boardInit() {
+        var $window = $(window);
+        var $gameContainer = $('.game-container');
+        var boardSize = $gameContainer.width()
+        var resizeScale = $window.width() / boardSize;
+        var resizeBoardWidth = boardSize * resizeScale;
+        var resizeOffset = (boardSize - resizeBoardWidth) / 2;
+        $gameContainer.css('transform', 'scale(' + resizeScale + ')');
+        $gameContainer.css('left', '-' + resizeOffset + 'px');
+        $gameContainer.css('top', '-' + resizeOffset + 'px');
+    }
+    boardInit();
+    getAvailableSessions();
+    if (document.getElementsByClassName('sessionchoice').checked = true){
+        console.log('1');
+    }
+</script>
+</body>
+</html>

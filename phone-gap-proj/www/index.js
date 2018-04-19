@@ -586,12 +586,12 @@ function startJoin(sessionname){
         turn = 1;
         side = 0;
         // save gender and age to the cloud
-        input_gender = document.getElementById("genderInput").value;
-        input_age = document.getElementById("ageInput").value;
-        if (firebase.auth().currentUser){
-            database.ref('leaderboard/'+firebase.auth().currentUser.uid+'/gender').set(input_gender);
-            database.ref('leaderboard/'+firebase.auth().currentUser.uid+'/age').set(input_age);
-        }
+        // input_gender = document.getElementById("genderInput").value;
+        // input_age = document.getElementById("ageInput").value;
+        // if (firebase.auth().currentUser){
+        //     database.ref('leaderboard/'+firebase.auth().currentUser.uid+'/gender').set(input_gender);
+        //     database.ref('leaderboard/'+firebase.auth().currentUser.uid+'/age').set(input_age);
+        // }
         initPieces(sessionId);
         database.ref('battle/'+sessionId+'/user/1').set(myName);
         database.ref('battle/'+sessionId+'/status').set("active");
