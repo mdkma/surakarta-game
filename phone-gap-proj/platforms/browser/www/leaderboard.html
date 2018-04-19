@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Leader Board</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            padding: 13px;
+            box-sizing: border-box;
+            height: 100%;
+            background-color: #5C6BC0;
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .title {
+            text-align: center;
+            font: italic 32px Georgia, serif;
+            color: rgb(253, 91, 153);
+        }
+        
+        .btn-group {
+            flex-wrap: wrap;
+        }
+
+        .active {
+            margin: 0 !important;
+        }
+
+        #barchart_material {
+            margin: 10px 0 !important;
+            padding: 5px;
+            height: 400px;
+        }
+
+    </style>
+  </head>
+  <body>
+    <h3 class="title">Leader Board</h3>
+    <p>Choose methods to categorize the ranking:</p>
+    <div class="btn-group btn-group-toggle" data-toggle="buttons" id="cateMethods" class="mt-3 ml-3">
+        <label class="btn btn-secondary active" onclick="loadBoard('overall')" >
+            <input type="radio" name="options"id="cateByOverall" autocomplete="off"> Overall
+        </label>
+        <label class="btn btn-secondary" onclick="loadBoard('cateByGenderM')" >
+            <input type="radio" name="options" id="cateByGenderM" autocomplete="off"> Gender: Male
+        </label>
+        <label class="btn btn-secondary" onclick="loadBoard('cateByGenderF')">
+                <input type="radio" name="options" id="cateByGenderF" autocomplete="off"> Gender: Female
+        </label>
+        <label class="btn btn-secondary" onclick="loadBoard('cateByGenderU')">
+                <input type="radio" name="options" id="cateByGenderU" autocomplete="off"> Gender: Unclassified
+        </label>
+        <label class="btn btn-secondary" onclick="loadBoard('cateByAgeYoung')">
+            <input type="radio" name="options" id="cateByAgeYoung" autocomplete="off"> Age: smaller than 20
+        </label>
+        <label class="btn btn-secondary" onclick="loadBoard('cateByAgeOld')">
+            <input type="radio" name="options" id="cateByAgeOld" autocomplete="off"> Age: larger than 20
+        </label>
+    </div>
+    <div id="barchart_material" class="mt-3 ml-3"></div>
+    
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['bar']});
+        google.charts.setOnLoadCallback(drawChart);
+  
+        function drawChart(input_data) {
+          var data = google.visualization.arrayToDataTable(input_data);
+  
+          var options = {
+            chart: {
+              title: 'Best Players!',
+              subtitle: 'The table shows the number of games that then won.',
+            },
+            bars: 'horizontal' // Required for Material Bar Charts.
+          };
+  
+          var chart = new google.charts.Bar(document.getElementById('barchart_material'));
+  
+          chart.draw(data, google.charts.Bar.convertOptions(options));
+        }
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.1/firebase-database.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="scripts/firebaseInit.js"></script>
+    <script>
+    function loadBoard(param){
+        console.log(param);
+        if (param == "overall"){
+            database.ref("leaderboard").orderByChild('wins').limitToLast(5).on("value", function(snapshot) {
+                userProfile = snapshot.val();
+                userArray = []
+                for (i in userProfile) {
+                    userArray.push(userProfile[i]);
+                }
+                userArray.sort(function(a,b){
+                    return a.wins - b.wins;
+                    }
+                );
+                userArray.reverse();
+                var input_data = [['User Email', 'Number of Wins']];
+                for (i in userArray){
+                    input_data.push([userArray[i].email, userArray[i].wins]);
+                }
+                drawChart(input_data)
+            });
+        } else if (param == "cateByGenderM"){
+            database.ref("leaderboard").orderByChild('gender').equalTo("Male").on("value", function(snapshot) {
+                userProfile = snapshot.val();
+                console.log(userProfile);
+                userArray = []
+                for (i in userProfile) {
+                    userArray.push(userProfile[i]);
+                }
+                userArray.sort(function(a,b){
+                    return a.wins - b.wins;
+                    }
+                );
+                userArray.reverse();
+                var input_data = [['User Email', 'Number of Wins']];
+                for (i in userArray){
+                    input_data.push([userArray[i].email, userArray[i].wins]);
+                }
+                drawChart(input_data)
+            });
+        } else if (param == "cateByGenderF"){
+            database.ref("leaderboard").orderByChild('gender').equalTo("Female").on("value", function(snapshot) {
+                userProfile = snapshot.val();
+                console.log(userProfile);
+                userArray = []
+                for (i in userProfile) {
+                    userArray.push(userProfile[i]);
+                }
+                userArray.sort(function(a,b){
+                    return a.wins - b.wins;
+                    }
+                );
+                userArray.reverse();
+                var input_data = [['User Email', 'Number of Wins']];
+                for (i in userArray){
+                    input_data.push([userArray[i].email, userArray[i].wins]);
+                }
+                drawChart(input_data)
+            });
+        } else if (param == "cateByGenderU"){
+            database.ref("leaderboard").orderByChild('gender').equalTo("Unclassified").on("value", function(snapshot) {
+                userProfile = snapshot.val();
+                console.log(userProfile);
+                userArray = []
+                for (i in userProfile) {
+                    userArray.push(userProfile[i]);
+                }
+                userArray.sort(function(a,b){
+                    return a.wins - b.wins;
+                    }
+                );
+                userArray.reverse();
+                var input_data = [['User Email', 'Number of Wins']];
+                for (i in userArray){
+                    input_data.push([userArray[i].email, userArray[i].wins]);
+                }
+                drawChart(input_data)
+            });
+        } else if (param == "cateByAgeYoung"){
+            database.ref("leaderboard").on("value", function(snapshot) {
+                userProfile = snapshot.val();
+                console.log(userProfile);
+                userArray = []
+                for (i in userProfile) {
+                    if (userProfile[i].age < 20){
+                    userArray.push(userProfile[i]);
+                    }
+                }
+                userArray.sort(function(a,b){
+                    return a.wins - b.wins;
+                    }
+                );
+                userArray.reverse();
+                var input_data = [['User Email', 'Number of Wins']];
+                for (i in userArray){
+                    input_data.push([userArray[i].email, userArray[i].wins]);
+                }
+                drawChart(input_data)
+            });
+        } else if (param == "cateByAgeOld"){
+            database.ref("leaderboard").on("value", function(snapshot) {
+                userProfile = snapshot.val();
+                console.log(userProfile);
+                userArray = []
+                for (i in userProfile) {
+                    if (userProfile[i].age >= 20){
+                    userArray.push(userProfile[i]);
+                    }
+                }
+                userArray.sort(function(a,b){
+                    return a.wins - b.wins;
+                    }
+                );
+                userArray.reverse();
+                var input_data = [['User Email', 'Number of Wins']];
+                for (i in userArray){
+                    input_data.push([userArray[i].email, userArray[i].wins]);
+                }
+                drawChart(input_data)
+            });
+        } else {
+            console.error("input parameter wrong");
+        }
+    }
+    loadBoard('overall');
+    </script>
+</body>
+</html>
