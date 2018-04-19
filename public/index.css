@@ -1,3 +1,12 @@
+html {
+    font-size: 10pt;
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
 #startPage {
     position: fixed;
     width: 100%;
@@ -9,26 +18,119 @@
 
 #welcome {
     color: white;
-    margin-top: 20px;
-    margin-left: 100px;
-}
-
-#nameimg {
-    margin-left: 100px;
-}
-
-h2 {
-    color: white;
-    margin-left: 100px;
-}
-
-.form-group {
-    width: 400px;
-    margin-left: 100px;
+    width: 100%;
+    margin: 20px auto;
+    text-align: center;
+    font-size: 20pt;
 }
 
 #login-name-display {
     color: white;
+    margin: 10px 15px;
+}
+
+.info-container {
+    margin: 10px;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+}
+
+.info-container .form-group {
+    width: 45%;
+    margin: auto;
+}
+
+.option {
+    padding: 3px;
+}
+
+.option .optionsnotice {
+    margin: 10px;
+    font-size: 14pt;
+    color: rgb(252, 141, 252);
+}
+
+.option #startbtn {
+   width: 100px;
+   margin: 5px auto;
+}
+
+.smallnotice {
+    color: white;
+    margin: 5px 10px;
+}
+
+
+#allAvailableSessionDiv {
+    max-height: 200px;
+    overflow: auto;
+    flex-wrap: wrap;
+}
+
+.choice-container {
+    position: absolute;
+    margin: auto 10px;
+    bottom: 10px;
+    display: flex;
+
+}
+
+.choice-container button {
+    font-size: 10pt;
+    width: auto;
+    padding: 5px;
+    margin: 3px !important;
+}
+
+.game {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.game .title {
+    text-align: center;
+    font: italic 32px Georgia, serif;
+    color: rgb(253, 91, 153);
+}
+
+.game .game-container {
+    margin: 15px 0;
+    margin-top: 55px;
+    
+}
+
+#noticeBoard {
+    position: absolute;
+    bottom: 5px;
+    max-height: 250px;
+    margin: 0 15px;
+}
+
+#noticeBoard h2 {
+    text-align: center;
+    font-size: 18pt;
+    margin-bottom: 10px;
+}
+
+#noticeBoard p {
+    margin: 3px;
+}
+
+#noticeBoard div {
+    text-align: center;
+}
+
+#noticeBoard button {
+    margin: 0 10px;
+}
+
+
+
+#nameimg {
     margin-left: 100px;
 }
 
@@ -39,21 +141,6 @@ h2 {
 .btn-type1 {
     width: 250px;
 }
-
-.smallnotice {
-    color: white;
-    margin-left: 150px;
-}
-
-#allAvailableSessionDiv {
-    margin-left: 150px;
-}
-
-#startbtn {
-    width: 400px;
-    margin-left: 150px;
-}
-
 #startbtn-join {
     width: 400px;
     margin-left: 150px;
@@ -71,12 +158,6 @@ table {
     margin-left: 200px;
     margin-top: 140px;
     z-index: -1;
-}
-
-#noticeBoard {
-    position: absolute;
-    top: 50px;
-    left: 1050px;
 }
 
 #turn {
@@ -215,4 +296,10 @@ table {
 
 .c1 {
     margin-left: 205px;
+}
+
+.game-container {
+    position: absolute;
+    height: 1024px;
+    width: 1024px;
 }
