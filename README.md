@@ -1,26 +1,48 @@
 # Surakarta Game
 
-**Play the game at the following link!**
-https://sarakarta-battle.firebaseapp.com
+**Download the app at the following link!**
+https://github.com/derekmma/surakarta-game/raw/master/SurakartaGame.apk
+
+## Installation Guide
+
+- Recommended version: Android 7.0
+
+1. Go to URL and download the `.apk` file:
+2. Install on mobile device by click the downloaded `.apk` file
+3. Grant all permissions needed by the application
 
 ## Functions
 
-![](img/login.png)
-*User login or create account at login page*
+#### User login or create account at login page
 
-![](img/main.png)
-*Then user can get this main page to choose functions*
+![](img/app-login-2.jpg)
 
-![](img/map.png)
-*Show all users' locations and grades on the map*
+#### Then user can get this main page to choose functions
 
-![](img/leaderboard.png)
-*Show the leaderboard with best players. They can be categorized by click the filter tag*
+![](img/app-main.jpg)
 
-![](img/board.png)
-*User can create a session or join a session created by other users.*
+#### User can create a session or join a available session to play the game!
 
-## Rules
+![](img/app-board.jpg)
+*Pieces' positions and player operations will be synced between two players*
+
+#### User can click the `Profile` button to review and modify their profile and current grades
+
+![](img/app-profile.jpg)
+
+#### User can click the `Location of Players` button to review locations and grades of all users
+
+![](img/app-map.jpg)
+
+#### Clicking the `Leader Board` to show the leaderboard
+
+![](img/app-leader-board.jpg)
+
+#### Clicking the `Learn Rules` to learn the rule of this game
+
+![](img/app-rules.jpg)
+
+## Rules of the Game
 
 ### Goal
 
@@ -48,33 +70,18 @@ Go through at least one inner or outer circuit around the corners and unlimited 
 
 The captured piece will be removed from the board, and the piece which capture others will stay at the location of captured piece.
 
-## Deployment
-
-To run the code locally, a server need to be run to ensure all functions are workable. 
-
-Run following commands in Terminal:
-
-1. Install `Firebase CLI` if you haven't
-
-```
-npm install -g firebase-tools
-```
-
-2. Use `firebase serve` to test web app:
-
-```
-firebase serve --only hosting
-```
-
-To deploy the web app on Firebase hosting, type following code in Terminal:
-
-```
-firebase deploy --only hosting
-```
-
-## Demo Videos
+### Demo Videos to Explain the Rules
 
 https://www.youtube.com/watch?v=Q7p5faImfqI
 
 https://www.youtube.com/watch?v=tUssoo6GySU
+
+## Authors
+
+* [Mingyu MA/Derek](https://derek.ma)
+* Jinshan GU
+* Zhenyuan MA
+* Kuo-Hao FU
+* Tsz Ling CHAU
+
 
