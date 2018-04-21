@@ -24,7 +24,13 @@
         <button id="startbtn" type="button" class="btn btn-primary btn-block mt-3" onclick="startCreate()">CREATE</button>
         <h2 class="display-5 mb-3 mt-3 optionsnotice">Option 2: Choose a Session to JOIN</h2>
         <div  class="smallnotice">
-            <p>All available sessions:</p>
+            <p>The sessions that you are in:</p>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons" id="allInSessionDiv">
+                <label class="btn btn-secondary">
+                    <input type="radio" name="options" id="option1" autocomplete="off"> Loading...
+                </label>
+            </div>
+            <p class="mt-3">All available sessions:</p>
             <div class="btn-group btn-group-toggle" data-toggle="buttons" id="allAvailableSessionDiv">
                 <label class="btn btn-secondary">
                     <input type="radio" name="options" id="option1" autocomplete="off"> Loading...
@@ -72,6 +78,7 @@
     </div>
     <div id='noticeBoard'>
         <h2 id='turn' class='display-2'>It's Mr. AI's Turn</h2>
+        <h5 id="timestop"></h5>
         <h5 id="notice1">You are red, Mr. AI is black.</h5>
         <h5 id="session-id-notice"></h5>
         </br>
@@ -104,6 +111,7 @@
     }
     boardInit();
     getAvailableSessions();
+    getInSessions();
     if (document.getElementsByClassName('sessionchoice').checked = true){
         console.log('1');
     }
